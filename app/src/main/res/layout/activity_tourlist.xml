@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".areaBasedSearch.TourListActivity"
+    android:orientation="vertical"
+    android:background="@drawable/back_ground"
+    android:padding="20dp">
+
+    <TextView
+        android:id="@+id/result"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20dp"
+        android:textColor="@android:color/black"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:padding="5dp"
+        android:fontFamily="@font/saemael"
+        android:background="@drawable/corner"
+        android:layout_marginBottom="5dp"/>
+    <ListView
+        android:id="@+id/tourlist"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/corner"
+        android:dividerHeight="3dp"
+        android:padding="5dp"/>
+
+
+</LinearLayout>

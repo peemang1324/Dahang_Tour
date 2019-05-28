@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="10dp">
+
+    <TextView
+        android:gravity="center"
+        android:id="@+id/contitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:padding="5dp"
+        android:textColor="@android:color/black"
+        android:fontFamily="@font/saemael"
+        android:textSize="20dp"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/corner"/>
+
+    <ImageView
+        android:id="@+id/tourimage"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:scaleType="fitCenter"
+        android:padding="10dp"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/corner"/>
+
+    <TextView
+        android:id="@+id/tourcontent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:autoLink="all"
+        android:background="@drawable/corner"
+        android:padding="10dp"
+        android:fontFamily="@font/saemael"
+        android:textSize="17dp"
+        android:textColor="@android:color/black"
+        android:layout_marginBottom="5dp"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:background="@drawable/corner">
+        <Button
+            android:id="@+id/select"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:background="@drawable/ic_selectp"
+            android:scaleType="centerInside" />
+        <Button
+            android:id="@+id/detail"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:background="@drawable/ic_infop"
+            android:scaleType="centerInside" />
+        <Button
+            android:id="@+id/moreimg"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:background="@drawable/ic_imagep"
+            android:scaleType="centerInside" />
+        <Button
+            android:id="@+id/onMap"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:background="@drawable/ic_mapp"
+            android:scaleType="centerInside" />
+    </LinearLayout>
+
+
+</LinearLayout>

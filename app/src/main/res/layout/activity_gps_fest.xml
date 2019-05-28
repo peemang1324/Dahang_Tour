@@ -1,0 +1,346 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.GpsFestTourlistActivity"
+    android:orientation="vertical"
+    android:background="@drawable/back_ground"
+    android:padding="20dp">
+
+    <LinearLayout
+        android:id="@+id/gpstour"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@drawable/corner"
+        android:padding="10dp"
+        android:layout_marginBottom="2.5dp"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1.2"
+            android:orientation="horizontal"
+            android:background="@drawable/corner"
+            android:layout_marginBottom="5dp">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="6"
+                android:text="내 주변 관광지 추천"
+                android:textSize="20dp"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:fontFamily="@font/saemael"
+                android:textColor="@android:color/black"/>
+            <Button
+                android:id="@+id/update1"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:background="@drawable/ic_newthingp"/>
+            <Button
+                android:id="@+id/more1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/ic_morep"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="3"
+            android:orientation="horizontal">
+            <LinearLayout
+                android:id="@+id/gpscon1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:padding="2dp"
+                android:background="@drawable/corner"
+                android:layout_marginRight="2.5dp"
+                android:layout_marginBottom="2.5dp"
+                android:orientation="vertical">
+                <ImageView
+                    android:id="@+id/gpsimg1"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginBottom="1dp"
+                    android:scaleType="fitCenter"
+                    android:layout_weight="4"/>
+                <TextView
+                    android:id="@+id/gpsttl1"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:gravity="center"
+                    android:textColor="@android:color/black"
+                    android:fontFamily="@font/saemael"
+                    android:layout_weight="1" />
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/gpscon2"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:padding="2dp"
+                android:background="@drawable/corner"
+                android:layout_marginLeft="2.5dp"
+                android:layout_marginBottom="2.5dp"
+                android:orientation="vertical">
+                <ImageView
+                    android:id="@+id/gpsimg2"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginBottom="1dp"
+                    android:scaleType="fitCenter"
+                    android:layout_weight="4"/>
+
+                <TextView
+                    android:id="@+id/gpsttl2"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:gravity="center"
+                    android:textColor="@android:color/black"
+                    android:fontFamily="@font/saemael"
+                    android:layout_weight="1" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="3"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/gpscon3"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="2.5dp"
+                android:layout_marginRight="2.5dp"
+                android:layout_weight="1"
+                android:padding="2dp"
+                android:background="@drawable/corner"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/gpsimg3"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginBottom="1dp"
+                    android:scaleType="fitCenter"
+                    android:layout_weight="4" />
+
+                <TextView
+                    android:id="@+id/gpsttl3"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:gravity="center"
+                    android:textColor="@android:color/black"
+                    android:fontFamily="@font/saemael"
+                    android:layout_weight="1" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/gpscon4"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="2.5dp"
+                android:layout_marginTop="2.5dp"
+                android:layout_weight="1"
+                android:padding="2dp"
+                android:background="@drawable/corner"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/gpsimg4"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginBottom="1dp"
+                    android:scaleType="fitCenter"
+                    android:layout_weight="4" />
+
+                <TextView
+                    android:id="@+id/gpsttl4"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:gravity="center"
+                    android:textColor="@android:color/black"
+                    android:fontFamily="@font/saemael"
+                    android:layout_weight="1" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/festtour"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@drawable/corner"
+        android:padding="10dp"
+        android:layout_marginBottom="2.5dp"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1.2"
+            android:orientation="horizontal"
+            android:background="@drawable/corner"
+            android:layout_marginBottom="5dp">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="6"
+                android:text="진행중인 행사/공연/축제"
+                android:textSize="20dp"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:fontFamily="@font/saemael"
+                android:textColor="@android:color/black"/>
+            <Button
+                android:id="@+id/update2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/ic_newthingp"/>
+            <Button
+                android:id="@+id/more2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/ic_morep"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="3"
+            android:orientation="horizontal">
+            <LinearLayout
+                android:id="@+id/festcon1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:padding="2dp"
+                android:background="@drawable/corner"
+                android:layout_marginRight="2.5dp"
+                android:layout_marginBottom="2.5dp"
+                android:orientation="vertical">
+                <ImageView
+                    android:id="@+id/festimg1"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginBottom="1dp"
+                    android:scaleType="fitCenter"
+                    android:layout_weight="4"/>
+                <TextView
+                    android:id="@+id/festttl1"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:gravity="center"
+                    android:textColor="@android:color/black"
+                    android:fontFamily="@font/saemael"
+                    android:layout_weight="1" />
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/festcon2"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:padding="2dp"
+                android:background="@drawable/corner"
+                android:layout_marginLeft="2.5dp"
+                android:layout_marginBottom="2.5dp"
+                android:orientation="vertical">
+                <ImageView
+                    android:id="@+id/festimg2"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginBottom="1dp"
+                    android:scaleType="fitCenter"
+                    android:layout_weight="4"/>
+
+                <TextView
+                    android:id="@+id/festttl2"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:gravity="center"
+                    android:textColor="@android:color/black"
+                    android:fontFamily="@font/saemael"
+                    android:layout_weight="1" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="3"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/festcon3"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="2.5dp"
+                android:layout_marginRight="2.5dp"
+                android:layout_weight="1"
+                android:padding="2dp"
+                android:background="@drawable/corner"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/festimg3"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginBottom="1dp"
+                    android:scaleType="fitCenter"
+                    android:layout_weight="4" />
+
+                <TextView
+                    android:id="@+id/festttl3"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:gravity="center"
+                    android:textColor="@android:color/black"
+                    android:fontFamily="@font/saemael"
+                    android:layout_weight="1" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/festcon4"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="2.5dp"
+                android:layout_marginTop="2.5dp"
+                android:layout_weight="1"
+                android:padding="2dp"
+                android:background="@drawable/corner"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/festimg4"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginBottom="1dp"
+                    android:scaleType="fitCenter"
+                    android:layout_weight="4" />
+
+                <TextView
+                    android:id="@+id/festttl4"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:gravity="center"
+                    android:textColor="@android:color/black"
+                    android:fontFamily="@font/saemael"
+                    android:layout_weight="1" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+
+
+
+
+</LinearLayout>

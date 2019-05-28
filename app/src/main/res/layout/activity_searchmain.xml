@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".areaBasedSearch.SearchActivity"
+    android:orientation="vertical"
+    android:background="@drawable/back_ground"
+    android:padding="30dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="지역기반 관광 컨텐츠 검색"
+        android:textSize="25dp"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:padding="5dp"
+        android:fontFamily="@font/saemael"
+        android:layout_marginBottom="20dp"
+        android:textColor="@android:color/black"
+        android:background="@drawable/corner" />
+
+    <LinearLayout
+        android:padding="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/corner" >
+        <Button
+            android:id="@+id/dosi"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="특별/광역시, 도 선택"
+            android:textSize="20dp"
+            android:fontFamily="@font/saemael"/>
+        <TextView
+            android:id="@+id/dosiSlct"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="특별/광역시, 도: "
+            android:layout_marginBottom="10dp"
+            android:textSize="20dp"
+            android:fontFamily="@font/saemael"/>
+        <Button
+            android:id="@+id/sigungu"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="시, 군, 구 선택"
+            android:textSize="20dp"
+            android:fontFamily="@font/saemael"/>
+        <TextView
+            android:id="@+id/sigunguSlct"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="시, 군, 구: "
+            android:layout_marginBottom="10dp"
+            android:textSize="20dp"
+            android:fontFamily="@font/saemael"/>
+        <Button
+            android:id="@+id/content"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="여행 콘텐츠 선택"
+            android:textSize="20dp"
+            android:fontFamily="@font/saemael"/>
+        <TextView
+            android:id="@+id/contentSlct"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="여행 콘텐츠: "
+            android:textSize="20dp"
+            android:fontFamily="@font/saemael"/>
+        <Button
+            android:id="@+id/search"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="right"
+            android:layout_marginBottom="40dp"
+            android:background="@drawable/ic_search2"
+            android:fontFamily="@font/saemael"/>
+
+        <Button
+            android:id="@+id/keywordSearch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="검색어 기반 상세 검색"
+            android:textSize="20dp"
+            android:fontFamily="@font/saemael"/>
+    </LinearLayout>
+
+
+</LinearLayout>
