@@ -80,6 +80,12 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         //제목 가져오기
         TextView titleTextView = cardView.findViewById(R.id.tv_title);
         titleTextView.setText(mDataset.get(position).getTitle());
+
+        TextView guidePay = cardView.findViewById(R.id.tv_guide_pay);
+        guidePay.setText("시간당 " + mDataset.get(position).getGuidePay() + " (원)");
+        TextView guideHour = cardView.findViewById(R.id.tv_guide_hour);
+        guideHour.setText("가능한 시간: " + mDataset.get(position).getGuideHour());
+
         //게시글 생성날짜 가져오기
         TextView createdAtTextView = cardView.findViewById(R.id.tv_createdAt);
         createdAtTextView.setText(new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(mDataset.get(position).getCreatedAt()));
