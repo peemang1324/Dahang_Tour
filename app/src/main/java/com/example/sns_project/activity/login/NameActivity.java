@@ -30,7 +30,7 @@ public class NameActivity extends BasicActivity {
         TextView tv_name_result = findViewById(R.id.tv_name_result);
         firebaseFirestore = FirebaseFirestore.getInstance(); //firestore 초기화(DataBase)
         DocumentReference docRef = firebaseFirestore.collection("users").document(user.getUid());
-        docRef.get().addOnCompleteListener(task -> {
+        docRef.get().addOnCompleteListener(task -> {//
             if (task.isSuccessful()) {
                 DocumentSnapshot document = task.getResult();
                 if (document.exists()) {
