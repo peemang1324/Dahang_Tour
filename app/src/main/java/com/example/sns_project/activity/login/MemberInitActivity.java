@@ -148,7 +148,7 @@ public class MemberInitActivity extends BasicActivity {
                         if (task.isSuccessful()) {
                             downloadUri = task.getResult();
                             MemberInfo memberInfo = new MemberInfo(name, age, gender, birthday, phone_number, address, tour, downloadUri.toString());
-                            realtimeUserInfo = new User(userId, name, "default", "offline", name.toLowerCase());
+                            realtimeUserInfo = new User(userId, name, downloadUri.toString(), "offline", name.toLowerCase());
                             storeUploader(memberInfo);
                         } else {
                             showToast(MemberInitActivity.this, "회원 정보를 보내는데 실패하였습니다.");
