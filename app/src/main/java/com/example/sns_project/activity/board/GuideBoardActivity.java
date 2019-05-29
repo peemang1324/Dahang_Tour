@@ -174,27 +174,20 @@ public class GuideBoardActivity extends BasicActivity {
             }else{ //전체보기로 했을 경우
                 CollectionReference collectionReference = firebaseFirestore.collection("guide_posts");
                 collectionReference
-                        .orderBy("createdAt", Query.Direction.DESCENDING).get() //데이터 내림차순 정렬
+                        .get() //데이터 내림차순 정렬
                         .addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
                                 postList.clear(); //ArrayList 초기화
                                 for (QueryDocumentSnapshot document : task.getResult()) { //게시글 데이터 설정
-                                    Log.d(SYSTMEM_LOG, document.getId() + " => " + document.getData());
-                                    postList.add(new PostInfo(
-                                            document.getData().get("title").toString(), //게시글 제목
-                                            document.getData().get("guidePay").toString(),
-                                            document.getData().get("guideHour").toString(),
-                                            document.getData().get("car").toString(),
-                                            (ArrayList<String>) document.getData().get("contents"), //게시글 내용
-                                            document.getData().get("publisher").toString(), //게시글을 생성한 유저
-                                            new Date(document.getDate("createdAt").getTime()), //게시글 생성일자
-                                            document.getId())); //게시글 ID
+                                    Log.d("abcdef", document.getId() + " => " + document.getData());
                                 }
                                 postAdapter.notifyDataSetChanged(); //어뎁터를 통해서 데이터 갱신
                             } else {
                                 Log.d(SYSTMEM_LOG, "Error getting documents: ", task.getException());
                             }
                         });
+
+
             }
         }
     }
