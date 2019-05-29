@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.GpsFestTourlistActivity"
+    tools:context=".activity.tour_api.GpsFestTourlistActivity"
     android:orientation="vertical"
     android:background="@drawable/back_ground"
     android:padding="20dp">
@@ -38,7 +38,8 @@
                 android:layout_width="0dp"
                 android:layout_height="40dp"
                 android:layout_weight="1"
-                android:background="@drawable/ic_newthingp"/>
+                android:background="@drawable/ic_newthingp"
+                android:clickable="false"/>
             <Button
                 android:id="@+id/more1"
                 android:layout_width="0dp"
@@ -204,7 +205,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@drawable/ic_newthingp"/>
+                android:background="@drawable/ic_newthingp"
+                android:clickable="false"/>
             <Button
                 android:id="@+id/more2"
                 android:layout_width="0dp"
@@ -338,9 +340,4 @@
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
-
-
-
-
-
 </LinearLayout>

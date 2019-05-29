@@ -1,4 +1,4 @@
-package com.example.sns_project.activity;
+package com.example.sns_project.activity.catting;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -8,13 +8,13 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.sns_project.activity.MainActivity;
 import com.example.sns_project.adapter.MessageAdapter;
 import com.example.sns_project.fragment.APIService;
 import com.example.sns_project.info.Chat;
@@ -35,11 +35,9 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;

@@ -1,4 +1,4 @@
-package com.example.sns_project.activity;
+package com.example.sns_project.activity.board;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -15,6 +15,8 @@ import android.widget.RelativeLayout;
 
 import com.bumptech.glide.Glide;
 import com.example.sns_project.R;
+import com.example.sns_project.activity.BasicActivity;
+import com.example.sns_project.activity.GalleryActivity;
 import com.example.sns_project.info.PostInfo;
 import com.example.sns_project.view.ContentsItemView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -37,11 +39,12 @@ import static com.example.sns_project.Util.GALLERY_IMAGE;
 import static com.example.sns_project.Util.GALLERY_VIDEO;
 import static com.example.sns_project.Util.INTENT_MEDIA;
 import static com.example.sns_project.Util.INTENT_PATH;
+import static com.example.sns_project.Util.SYSTMEM_LOG;
 import static com.example.sns_project.Util.isStorageUrl;
 import static com.example.sns_project.Util.showToast;
 import static com.example.sns_project.Util.storageUrlToName;
 
-public class WritePostActivity extends BasicActivity {
+public class WriteGuidePostActivity extends BasicActivity {
     private final static String TAG ="WritePostActivity";
     private FirebaseUser user;
     private StorageReference storageRef;
@@ -55,13 +58,11 @@ public class WritePostActivity extends BasicActivity {
     private RelativeLayout rl_post_background, loaderLayout;
     private int pathCount, successCount;
     PostInfo postInfo;
-
+    private String apiId;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_write_post);
-
-
+        setContentView(R.layout.activity_tourlist_write_post);
 
         loaderLayout = findViewById(R.id.loaderLayout);
         parent = findViewById(R.id.contents_layout); //레이아웃 추가
@@ -166,10 +167,10 @@ public class WritePostActivity extends BasicActivity {
             case R.id.bt_delete_contents: //삭제 버튼
                 View selectedView = (View)selectImageView.getParent();
 
-                StorageReference desertRef = storageRef.child("posts/" + postInfo.getPostId() + "/" + storageUrlToName(pathList.get(parent.indexOfChild(selectedView) - 1))); //Firebase Storage 경로 설정
+                StorageReference desertRef = storageRef.child("guide_posts/" + postInfo.getPostId() + "/" + storageUrlToName(pathList.get(parent.indexOfChild(selectedView) - 1))); //Firebase Storage 경로 설정
                 desertRef.delete().addOnSuccessListener(aVoid -> {
                     Log.e(TAG, "Firebase Storage Data Deleted");
-                }).addOnFailureListener(exception ->showToast(WritePostActivity.this, "Storage File Delete Error"));
+                }).addOnFailureListener(exception ->showToast(WriteGuidePostActivity.this, "Storage File Delete Error"));
 
                 pathList.remove(parent.indexOfChild(selectedView) - 1); //parent가 몇번째 자식인지를 알아옴
                 parent.removeView(selectedView);
@@ -189,6 +190,7 @@ public class WritePostActivity extends BasicActivity {
     };
 
     private void storageUpload() {
+
         EditText titleFocus = findViewById(R.id.et_post_title);
         EditText guidePayFocus = findViewById(R.id.et_post_guide_pay);
         EditText guideHourFocus = findViewById(R.id.et_post_guide_hour);
@@ -203,6 +205,9 @@ public class WritePostActivity extends BasicActivity {
         car = carButton.toString().split("rb_")[1];
         car = car.substring(0, car.length() - 1);
 
+        Intent intent = getIntent();
+        apiId = intent.getExtras().getString("apiId");
+
         if (title.length() > 0) {
             loaderLayout.setVisibility(View.VISIBLE);
             final ArrayList<String> contentsList = new ArrayList<>();
@@ -211,7 +216,9 @@ public class WritePostActivity extends BasicActivity {
             StorageReference storageRef = storage.getReference();
             FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
 
-            final DocumentReference documentReference = postInfo == null ? firebaseFirestore.collection("posts").document() : firebaseFirestore.collection("posts").document(postInfo.getPostId());
+            final DocumentReference documentReference = postInfo == null ? firebaseFirestore.collection("guide_posts").document(apiId).collection("board").document()
+                    : firebaseFirestore.collection("guide_posts").document(apiId).collection("board").document(postInfo.getPostId());
+
             final Date date = postInfo == null ? new Date() : postInfo.getCreatedAt(); //수정했을 경우 또는 게시물을 생성했을 경우
 
             for(int i = 0; i < parent.getChildCount(); i++){
@@ -228,7 +235,7 @@ public class WritePostActivity extends BasicActivity {
                         successCount++;
                         contentsList.add(path);
                         String[] pathArray = path.split("\\.");
-                        final StorageReference mountainImagesRef = storageRef.child("posts/" + documentReference.getId() + "/" + pathCount + "." + pathArray[pathArray.length - 1]);
+                        final StorageReference mountainImagesRef = storageRef.child("guide_posts/" + documentReference.getId() + "/" + pathCount + "." + pathArray[pathArray.length - 1]);
                         try {
                             InputStream stream = new FileInputStream(new File(pathList.get(pathCount)));
                             StorageMetadata metadata = new StorageMetadata.Builder().setCustomMetadata("index", "" + (contentsList.size() - 1)).build();
@@ -256,7 +263,7 @@ public class WritePostActivity extends BasicActivity {
                 storeUpload(documentReference, new PostInfo(title, guidePay, guideHour, car, contentsList, user.getUid(), new Date()));
             }
         } else {
-            showToast(WritePostActivity.this,"제목을 입력해주세요.");
+            showToast(WriteGuidePostActivity.this,"제목을 입력해주세요.");
             titleFocus.requestFocus();
         }
     }

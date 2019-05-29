@@ -1,4 +1,4 @@
-package com.example.sns_project.activity;
+package com.example.sns_project.activity.board;
 
 import android.graphics.Color;
 import android.os.Bundle;
@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.sns_project.activity.BasicActivity;
 import com.example.sns_project.info.PostInfo;
 import com.example.sns_project.R;
 

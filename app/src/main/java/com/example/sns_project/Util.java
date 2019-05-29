@@ -11,9 +11,13 @@ public class Util {
 
     public static final String INTENT_PATH = "path";
     public static final String INTENT_MEDIA = "path";
-    public static final String SYSTMEM_LOG = "system_lohg";
+    public static final String SYSTMEM_LOG = "system_log";
     public static final int GALLERY_IMAGE = 0;
     public static final int GALLERY_VIDEO = 1;
+
+
+    public static final String BOARD_TOURLIST = "TOURLIST";
+    public static final String BOARD_GUIDE = "GUIDE";
 
 
     public static void showToast(Activity activity, String msg){ //토스트창 출력

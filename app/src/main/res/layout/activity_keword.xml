@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.KeywordActivity"
+    tools:context=".activity.tour_api.KeywordActivity"
     android:orientation="vertical"
     android:background="@drawable/back_ground"
     android:padding="30dp">

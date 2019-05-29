@@ -10,7 +10,6 @@ import android.widget.LinearLayout;
 
 import com.bumptech.glide.Glide;
 import com.example.sns_project.R;
-import com.example.sns_project.activity.WritePostActivity;
 
 import javax.annotation.Nullable;
 

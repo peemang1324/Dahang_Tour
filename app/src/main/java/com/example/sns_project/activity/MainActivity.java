@@ -10,6 +10,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.example.sns_project.activity.board.BoardSelectActivity;
 import com.example.sns_project.fragment.ChatsFragment;
 import com.example.sns_project.fragment.HomeFragment;
 import com.example.sns_project.fragment.ProfileFragment;
@@ -99,7 +100,7 @@ public class MainActivity extends BasicActivity {
                 return true;
 
             case R.id.menu_bulletin_board: // 게시판 옵션을 눌렀을 경우
-                myStartActivity(GuideBoardActivity.class);
+                myStartActivity(BoardSelectActivity.class);
                 return true;
 
             default:

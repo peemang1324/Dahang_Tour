@@ -1,6 +1,5 @@
 package com.example.sns_project.Notifications;
 
-import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -13,8 +12,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 
-import com.example.sns_project.activity.MainActivity;
-import com.example.sns_project.activity.MessageActivity;
+import com.example.sns_project.activity.catting.MessageActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.messaging.FirebaseMessagingService;

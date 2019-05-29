@@ -3,6 +3,7 @@ package com.example.sns_project.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,11 +14,27 @@ import android.widget.TextView;
 
 
 import com.example.sns_project.R;
+import com.example.sns_project.activity.tour_api.DetailActivity;
+import com.example.sns_project.activity.tour_api.GetOtherimgActivity;
+import com.example.sns_project.activity.tour_api.MapMarkerActivity;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 
-public class ListAdapter extends BaseAdapter {
+import static com.example.sns_project.Util.BOARD_GUIDE;
+import static com.example.sns_project.Util.BOARD_TOURLIST;
+import static com.example.sns_project.Util.SYSTMEM_LOG;
 
+public class ListAdapter extends BaseAdapter {
+    private FirebaseUser user;
+    private StorageReference storageReference;
+    private FirebaseFirestore firebaseFirestore;
+    private String userType;
     private ArrayList<TourlistItem> TourlistItemList = new ArrayList<TourlistItem>();
 
     public ListAdapter() {
@@ -55,40 +72,65 @@ public class ListAdapter extends BaseAdapter {
 
         //상세정보 버튼
         Button detail = (Button) convertView.findViewById(R.id.detail);
-        detail.setOnClickListener(new Button.OnClickListener() {
-            public void onClick(View v) {
-                Intent i = new Intent(context, com.example.sns_project.activity.DetailActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                i.putExtra("contId", listViewItem.getContId());
-                i.putExtra("conTitle", listViewItem.getContitle());
-                i.putExtra("contypeid", listViewItem.getContypeid());
+        detail.setOnClickListener(v -> {
+            Intent i = new Intent(context, DetailActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            i.putExtra("contId", listViewItem.getContId());
+            i.putExtra("conTitle", listViewItem.getContitle());
+            i.putExtra("contypeid", listViewItem.getContypeid());
 
-                context.startActivity(i);
-            }
+            context.startActivity(i);
         });
 
         //다른 사진 버튼
         Button moreimg = (Button) convertView.findViewById(R.id.moreimg);
-        moreimg.setOnClickListener(new Button.OnClickListener() {
-            public void onClick(View v) {
-                Intent i = new Intent(context, com.example.sns_project.activity.GetOtherimgActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                i.putExtra("contId", listViewItem.getContId());
-                i.putExtra("conTitle", listViewItem.getContitle());
+        moreimg.setOnClickListener(v -> {
+            Intent i = new Intent(context, GetOtherimgActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            i.putExtra("contId", listViewItem.getContId());
+            i.putExtra("conTitle", listViewItem.getContitle());
 
-                context.startActivity(i);
-            }
+            context.startActivity(i);
         });
 
         Button onMap = (Button) convertView.findViewById(R.id.onMap);
-        onMap.setOnClickListener(new Button.OnClickListener() {
-            public void onClick(View v) {
-                Intent i = new Intent(context, com.example.sns_project.activity.MapMarkerActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                i.putExtra("conTitle", listViewItem.getContitle());
-                i.putExtra("addr", listViewItem.getAddr());
-                i.putExtra("mapx", listViewItem.getV());
-                i.putExtra("mapy", listViewItem.getV1());
+        onMap.setOnClickListener(v -> {
+            Intent i = new Intent(context, MapMarkerActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            i.putExtra("conTitle", listViewItem.getContitle());
+            i.putExtra("addr", listViewItem.getAddr());
+            i.putExtra("mapx", listViewItem.getV());
+            i.putExtra("mapy", listViewItem.getV1());
 
-                context.startActivity(i);
+            context.startActivity(i);
+        });
+
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        firebaseFirestore = FirebaseFirestore.getInstance(); //firestore 초기화(DataBase)
+        DocumentReference docRef = firebaseFirestore.collection("users").document(user.getUid());
+        docRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot document = task.getResult();
+                if (document.exists()) {
+                  userType = document.getData().get("tour").toString();
+                } else {
+                    Log.d(SYSTMEM_LOG, "No such document");
+                }
+            } else {
+                Log.d(SYSTMEM_LOG, "get failed with ", task.getException());
             }
+        });
+
+        Button goBoard = (Button) convertView.findViewById(R.id.select);
+        goBoard.setOnClickListener(v -> {
+            Intent intent;
+          if(userType.equals("tourlist")){
+              intent = new Intent(context, com.example.sns_project.activity.board.TourlistBoardActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+              intent.putExtra("contentId", listViewItem.getContId());
+              context.startActivity(intent);
+          }else{
+              intent = new Intent(context, com.example.sns_project.activity.board.GuideBoardActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+              intent.putExtra("contentId", listViewItem.getContId());
+              Log.e("api", listViewItem.getContId());
+              context.startActivity(intent);
+          }
         });
 
         return convertView;

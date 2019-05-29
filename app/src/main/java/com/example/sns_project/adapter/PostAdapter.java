@@ -18,7 +18,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.sns_project.info.PostInfo;
 import com.example.sns_project.R;
-import com.example.sns_project.activity.PostActivity;
+import com.example.sns_project.activity.board.PostActivity;
 import com.example.sns_project.listener.OnPostListener;
 
 import java.text.SimpleDateFormat;
@@ -31,6 +31,7 @@ import static com.example.sns_project.Util.isStorageUrl;
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder> {
     private ArrayList<PostInfo> mDataset;
     private Activity activity;
+    private String apiId, apiTitle;
 
     private OnPostListener onPostListener;
 
@@ -80,7 +81,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         //제목 가져오기
         TextView titleTextView = cardView.findViewById(R.id.tv_title);
         titleTextView.setText(mDataset.get(position).getTitle());
-
         TextView guidePay = cardView.findViewById(R.id.tv_guide_pay);
         guidePay.setText("시간당 " + mDataset.get(position).getGuidePay() + " (원)");
         TextView guideHour = cardView.findViewById(R.id.tv_guide_hour);

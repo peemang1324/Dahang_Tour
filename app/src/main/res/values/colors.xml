@@ -26,4 +26,13 @@
     <color name="colorpink">#ff8b8b</color>
     <color name="colorBeige">#ebd3c9</color>
     <color name="colorbrown">#886348</color>
+
+    <color name="black0">#000</color>
+    <color name="black2">#222</color>
+    <color name="black22">#222632</color>
+    <color name="black3">#333</color>
+    <color name="black4">#444</color>
+    <color name="black5">#555</color>
+    <color name="black77">#707070</color>
+
 </resources>

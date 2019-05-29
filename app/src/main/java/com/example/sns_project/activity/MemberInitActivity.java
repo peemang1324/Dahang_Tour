@@ -47,7 +47,7 @@ public class MemberInitActivity extends BasicActivity {
     private ImageView profileImageView; //프로필 이미지 넣기
     private String profilePath; //프로필 사진 경로를 저장할 변수
     User realtimeUserInfo; //realtimeDB에 저장할 user 객체
-    private  String userId =  user.getUid();
+    private  String userId;
     private DatabaseReference mDatabase;// ...
     Uri downloadUri;
 
@@ -103,6 +103,7 @@ public class MemberInitActivity extends BasicActivity {
     private String gender, tour;
     private void storageUploader() { //firebase storage 업로드 메소드
         /*각 텍스트창 입력 값을 가져옴*/
+
         final String name = ((EditText) findViewById(R.id.et_name)).getText().toString();
         final String age = ((EditText) findViewById(R.id.et_age)).getText().toString();
         final String birthday = ((EditText) findViewById(R.id.et_birthday)).getText().toString();
@@ -128,6 +129,7 @@ public class MemberInitActivity extends BasicActivity {
             FirebaseStorage storage = FirebaseStorage.getInstance();
             StorageReference storageRef = storage.getReference();
             user = FirebaseAuth.getInstance().getCurrentUser();
+            userId = user.getUid();
             final StorageReference mountainImagesRef = storageRef.child("users/" + user.getUid() + "/profileImage.jpg");
 
             if (profilePath == null) { //프로필 이미지를 넣지 않았을 경우
@@ -176,7 +178,7 @@ public class MemberInitActivity extends BasicActivity {
 
                     showToast(MemberInitActivity.this, "회원정보 등록을 성공하였습니다.");
                     loaderLayout.setVisibility(View.GONE);
-                    finish();
+                    myStartActivity(NameActivity.class);
                 })
                 .addOnFailureListener(e -> {
                     showToast(MemberInitActivity.this, "회원정보 등록에 실패하였습니다.");
@@ -189,4 +191,6 @@ public class MemberInitActivity extends BasicActivity {
         Intent intent = new Intent(this, c);
         startActivityForResult(intent, 0);
     }
+
+
 }

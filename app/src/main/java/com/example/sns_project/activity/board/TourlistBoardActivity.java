@@ -1,7 +1,6 @@
-package com.example.sns_project.activity;
+package com.example.sns_project.activity.board;
 
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,6 +9,9 @@ import android.util.Log;
 import android.view.View;
 
 import com.example.sns_project.R;
+import com.example.sns_project.activity.BasicActivity;
+import com.example.sns_project.activity.MemberInitActivity;
+import com.example.sns_project.activity.SignUpActivity;
 import com.example.sns_project.adapter.PostAdapter;
 import com.example.sns_project.info.PostInfo;
 import com.example.sns_project.listener.OnPostListener;
@@ -34,7 +36,7 @@ import static com.example.sns_project.Util.isStorageUrl;
 import static com.example.sns_project.Util.showToast;
 import static com.example.sns_project.Util.storageUrlToName;
 
-public class GuideBoardActivity extends BasicActivity {
+public class TourlistBoardActivity extends BasicActivity {
     private FirebaseUser firebaseUser;
     private FirebaseFirestore firebaseFirestore;
     private PostAdapter postAdapter; //게시물 Adapter
@@ -56,25 +58,22 @@ public class GuideBoardActivity extends BasicActivity {
         } else {
             firebaseFirestore = FirebaseFirestore.getInstance();
             DocumentReference documentReference = firebaseFirestore.collection("users").document(firebaseUser.getUid());
-            documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                    if (task.isSuccessful()) {
-                        DocumentSnapshot document = task.getResult();
-                        if (document != null) {
-                            if (document.exists()) {
-                            } else {
-                                myStartActivity(MemberInitActivity.class);
-                            }
+            documentReference.get().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document != null) {
+                        if (document.exists()) {
+                        } else {
+                            myStartActivity(MemberInitActivity.class);
                         }
-                    } else {
                     }
+                } else {
                 }
             });
         }
 
         postList = new ArrayList<>(); //게시물 리스트 초기화
-        postAdapter = new PostAdapter(GuideBoardActivity.this, postList); //게시물 Adapter 초기화
+        postAdapter = new PostAdapter(TourlistBoardActivity.this, postList); //게시물 Adapter 초기화
         postAdapter.setOnPostListener(onPostListener); //Listener 전달
 
         //게시글 추가 버튼
@@ -83,7 +82,7 @@ public class GuideBoardActivity extends BasicActivity {
 
         //recyclerView 갱신
         recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(GuideBoardActivity.this));
+        recyclerView.setLayoutManager(new LinearLayoutManager(TourlistBoardActivity.this));
         recyclerView.setAdapter(postAdapter);
     }
 
@@ -97,13 +96,13 @@ public class GuideBoardActivity extends BasicActivity {
         @Override
         public void onDelete(int position) {
             String postId = postList.get(position).getPostId(); //postID 값 저장
-            firebaseFirestore.collection("posts").document(postId) //posts 컬렉션 안에있는 게시물 위치값 가져옴
+            firebaseFirestore.collection("tourlist_posts").document(postId) //posts 컬렉션 안에있는 게시물 위치값 가져옴
                     .delete()
                     .addOnSuccessListener(aVoid -> {  //게시글 삭제 성공
-                        showToast(GuideBoardActivity.this, "삭제 완료");
+                        showToast(TourlistBoardActivity.this, "삭제 완료");
                         postUpdate();
                     })
-                    .addOnFailureListener(e -> showToast(GuideBoardActivity.this, "삭제 오류")); //게시글 삭제 실패
+                    .addOnFailureListener(e -> showToast(TourlistBoardActivity.this, "삭제 오류")); //게시글 삭제 실패
 
             ArrayList<String> contentsList = postList.get(position).getContents();
 
@@ -112,11 +111,11 @@ public class GuideBoardActivity extends BasicActivity {
                 if (isStorageUrl(contents)) { //URL이고 storage 경로일 경우
                     storageDeleteCount++; //삭제 개수 파악
 
-                    StorageReference desertRef = storageRef.child("posts/" + postId + "/" + storageUrlToName(contents)); //Firebase Storage 경로 설정
+                    StorageReference desertRef = storageRef.child("tourlist_posts/" + postId + "/" + storageUrlToName(contents)); //Firebase Storage 경로 설정
                     desertRef.delete().addOnSuccessListener(aVoid -> {
                         storageDeleteCount--;
                         storeUploader(postId);
-                    }).addOnFailureListener(exception -> showToast(GuideBoardActivity.this, "ERROR"));
+                    }).addOnFailureListener(exception -> showToast(TourlistBoardActivity.this, "ERROR"));
 
                 }
             }
@@ -125,21 +124,21 @@ public class GuideBoardActivity extends BasicActivity {
 
         @Override
         public void onModify(int position) {
-            myStartActivity(WritePostActivity.class, postList.get(position));
+            myStartActivity(WriteTourlistPostActivity.class, postList.get(position));
         }
     };
 
     View.OnClickListener onClickListener = v -> {
         switch (v.getId()) {
             case R.id.floatingActionButton:
-                myStartActivity(WritePostActivity.class); //게시글 작성 화면으로 이동
+                myStartActivity(WriteTourlistPostActivity.class); //게시글 작성 화면으로 이동
                 break;
         }
     };
 
     private void postUpdate() { //게시물 갱신 메소드
         if (firebaseUser != null) { //사용자가 로그인 되었다면
-            CollectionReference collectionReference = firebaseFirestore.collection("posts");
+            CollectionReference collectionReference = firebaseFirestore.collection("tourlist_posts");
             collectionReference
                     .orderBy("createdAt", Query.Direction.DESCENDING).get() //데이터 내림차순 정렬
                     .addOnCompleteListener(task -> {
@@ -167,13 +166,13 @@ public class GuideBoardActivity extends BasicActivity {
 
     private void storeUploader(String postId) { //Store 수정
         if (storageDeleteCount == 0) {
-            firebaseFirestore.collection("posts").document(postId)
+            firebaseFirestore.collection("tourlist_posts").document(postId)
                     .delete()
                     .addOnSuccessListener(aVoid -> {
-                        showToast(GuideBoardActivity.this, "게시글을 삭제하였습니다.");
+                        showToast(TourlistBoardActivity.this, "게시글을 삭제하였습니다.");
                         postUpdate();
                     })
-                    .addOnFailureListener(e -> showToast(GuideBoardActivity.this, "게시글을 삭제하지 못하였습니다."));
+                    .addOnFailureListener(e -> showToast(TourlistBoardActivity.this, "게시글을 삭제하지 못하였습니다."));
         }
     }
 

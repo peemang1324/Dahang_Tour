@@ -1,4 +1,4 @@
-package com.example.sns_project.activity;
+package com.example.sns_project.activity.catting;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.sns_project.R;
+import com.example.sns_project.activity.BasicActivity;
 import com.example.sns_project.fragment.ChatsFragment;
 import com.example.sns_project.fragment.ProfileFragment;
 import com.example.sns_project.fragment.UsersFragment;

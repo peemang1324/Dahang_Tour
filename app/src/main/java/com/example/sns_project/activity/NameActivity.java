@@ -1,94 +1,62 @@
-//package com.example.sns_project.activity;
-//
-//import android.animation.Animator;
-//import android.content.Intent;
-//import android.content.SharedPreferences;
-//import android.os.Bundle;
-//import android.widget.Button;
-//import android.widget.ImageView;
-//import android.widget.TextView;
-//
-//
-//import com.example.sns_project.R;
-//import com.example.sns_project.activity.BasicActivity;
-//
-//
-//public class NameActivity extends BasicActivity {
-//
-//    @BindView(R.id.tv_name_result)
-//    public TextView tvNameResult;
-//
-//    @BindView(R.id.iv_change_button)
-//    public ImageView ivChangeName;
-//
-//    @BindView(R.id.btn_name_submit)
-//    public Button btnNameSubmit;
-//
-//    NameContract.Presenter presenter;
-//
-//    @Override
-//    public void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        SharedPreferences userData = getSharedPreferences(USER_DATA, MODE_PRIVATE);
-//        presenter = new NamePresenter(this, userData);
-//    }
-//
-//
-//    public void initView() {
-//        setContentView(R.layout.activity_name);
-//        ButterKnife.bind(this);
-//        this.renderView();
-//    }
-//
-//    @Override
-//    public void startTendencyActivity() {
-//        startActivity(new Intent(this, TendencyActivity.class));
-//        finish();
-//    }
-//
-//    @Override
-//    public void renderChangeName(String currentName) {
-//        YoYo.with(Techniques.FadeOut)
-//                .duration(250)
-//                .withListener(new Animator.AnimatorListener() {
-//                    @Override
-//                    public void onAnimationStart(Animator animation) {
-//                    }
-//                    @Override
-//                    public void onAnimationEnd(Animator animation) {
-//                        tvNameResult.setText(currentName);
-//                        showName();
-//                    }
-//                    @Override
-//                    public void onAnimationCancel(Animator animation) {
-//                    }
-//                    @Override
-//                    public void onAnimationRepeat(Animator animation) {
-//                    }
-//                })
-//                .playOn(tvNameResult);
-//    }
-//
-//    private void showName() {
-//        YoYo.with(Techniques.FadeIn)
-//                .duration(1300)
-//                .playOn(tvNameResult);
-//    }
-//
-//    private void renderView() {
-//        this.changeNameListener();
-//        this.submitButtonListener();
-//    }
-//
-//    public void changeNameListener() {
-//        ivChangeName.setOnClickListener((__) -> {
-//            presenter.changeNameAction();
-//        });
-//    }
-//
-//    private void submitButtonListener() {
-//        btnNameSubmit.setOnClickListener((__) -> {
-//            presenter.submitAction();
-//        });
-//    }
-//}
+package com.example.sns_project.activity;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
+
+import com.example.sns_project.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.StorageReference;
+
+import static com.example.sns_project.Util.SYSTMEM_LOG;
+
+public class NameActivity extends BasicActivity {
+    private FirebaseUser user; //Firebase 사용자 정보를 담을 변수
+    private StorageReference storageReference;
+    private FirebaseFirestore firebaseFirestore;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_name);
+        user = FirebaseAuth.getInstance().getCurrentUser(); //사용자가 로그인 되어있는지 확인
+        TextView tv_name_result = findViewById(R.id.tv_name_result);
+        firebaseFirestore = FirebaseFirestore.getInstance(); //firestore 초기화(DataBase)
+        DocumentReference docRef = firebaseFirestore.collection("users").document(user.getUid());
+        docRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot document = task.getResult();
+                if (document.exists()) {
+
+                    tv_name_result.setText(document.getData().get("name").toString());
+
+                } else {
+                    Log.d(SYSTMEM_LOG, "No such document");
+                }
+            } else {
+                Log.d(SYSTMEM_LOG, "get failed with ", task.getException());
+            }
+        });
+        findViewById(R.id.bt_name_submit).setOnClickListener(onClickListener); //로그인 버튼이 클릭된 경우
+    }
+
+    View.OnClickListener onClickListener = v -> {
+        switch (v.getId()) {
+            case R.id.bt_name_submit:
+                myStartActivity(MainActivity.class);
+                break;
+        }
+    };
+
+    private void myStartActivity(Class c) { //원하는 Activity로 이동시켜주는 메소드
+        Intent intent = new Intent(this, c);
+        startActivity(intent);
+    }
+}

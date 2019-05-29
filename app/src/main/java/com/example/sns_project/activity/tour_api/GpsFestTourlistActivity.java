@@ -1,4 +1,4 @@
-package com.example.sns_project.activity;
+package com.example.sns_project.activity.tour_api;
 
 import android.Manifest;
 import android.content.ActivityNotFoundException;
@@ -26,7 +26,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 
 import com.example.sns_project.R;

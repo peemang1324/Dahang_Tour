@@ -11,7 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.example.sns_project.activity.MessageActivity;
+import com.example.sns_project.activity.catting.MessageActivity;
 import com.example.sns_project.info.Chat;
 import com.example.sns_project.info.User;
 import com.example.sns_project.R;

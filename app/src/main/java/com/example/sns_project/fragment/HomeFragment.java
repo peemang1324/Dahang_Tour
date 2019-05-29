@@ -1,9 +1,7 @@
 package com.example.sns_project.fragment;
 
 import android.Manifest;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -13,16 +11,13 @@ import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,15 +27,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.sns_project.R;
-import com.example.sns_project.activity.GpsFestTourlistActivity;
-import com.example.sns_project.activity.TourListActivity;
+import com.example.sns_project.activity.tour_api.TourListActivity;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.InterruptedIOException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.text.SimpleDateFormat;
@@ -81,8 +74,6 @@ public class HomeFragment extends Fragment {
     Double mylocateX = null, mylocateY = null;  //내 위치정보
     String dateToday;
 
-    private final int MY_PERMISSIONS_REQUEST_READ_CONTACTS=1001;
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -122,7 +113,6 @@ public class HomeFragment extends Fragment {
         gpsttl2.setText("LOADING");
         gpsttl3.setText("LOADING");
         gpsttl4.setText("LOADING");
-        update1.setClickable(false);
 
         festimg1.setImageDrawable(null);
         festimg2.setImageDrawable(null);
@@ -132,44 +122,8 @@ public class HomeFragment extends Fragment {
         festttl2.setText("LOADING");
         festttl3.setText("LOADING");
         festttl4.setText("LOADING");
-        update2.setClickable(false);
 
         final Intent i = new Intent(getActivity(), TourListActivity.class);
-
-        /* 앱의 사용권한 묻기 */
-        //해당 권한이 사용자에 이해 승인되어있지 않음
-        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
-            //이전 앱 실행시 권한 거부했을 경우 다시 권한 설정을 물음
-            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)) {
-                AlertDialog.Builder localBuilder = new AlertDialog.Builder(getActivity());
-                localBuilder.setTitle("권한 설정")
-                        .setMessage("권한 거절로 인해 일부기능이 제한됩니다.")
-                        .setPositiveButton("권한 설정하러 가기", (paramAnonymousDialogInterface, paramAnonymousInt) -> {
-                            try {
-                                Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-                                        .setData(Uri.parse("package:" + getActivity().getPackageName()));
-                                startActivity(intent);
-                            } catch (ActivityNotFoundException e) {
-                                e.printStackTrace();
-                                Intent intent = new Intent(Settings.ACTION_MANAGE_APPLICATIONS_SETTINGS);
-                                startActivity(intent);
-                            }
-                        })
-                        .setNegativeButton("취소하기", (paramAnonymousDialogInterface, paramAnonymousInt) -> {
-                        })
-                        .create()
-                        .show();
-
-                //앱을 최초로 실행했을 때
-            } else {
-
-                ActivityCompat.requestPermissions(getActivity(),
-                        new String[]{Manifest.permission.READ_CONTACTS},
-                        MY_PERMISSIONS_REQUEST_READ_CONTACTS);
-            }
-
-        }
 
         //위치 관리자 객체 참조
         final LocationManager lm = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
@@ -204,38 +158,67 @@ public class HomeFragment extends Fragment {
                 getGpsTourListData();
 
                 final Drawable[] tourListImage = new Drawable[imgURL.size()];
-                Log.d("imgURL", String.valueOf(imgURL.size()));
-                Log.d("tourListTitle", String.valueOf(tourListTitle.size()));
-                Log.d("tourListContent", String.valueOf(tourListContent.size()));
-                Log.d("contId", String.valueOf(contId.size()));
-                Log.d("imgURL", String.valueOf(imgURL.get(0)));
 
-                //url에서 이미지 가져오기
+                if ( contId.size() != 0 ) {
 
-                for(int i = 0; i<imgURL.size(); i++) {
-                    if (imgURL.get(i) != "noimg") {
-                        tourListImage[i] = getImageFromURL(imgURL.get(i));
+                    Log.d("imgURL", String.valueOf(imgURL.size()));
+                    Log.d("tourListTitle", String.valueOf(tourListTitle.size()));
+                    Log.d("tourListContent", String.valueOf(tourListContent.size()));
+                    Log.d("contId", String.valueOf(contId.size()));
+                    Log.d("imgURL", String.valueOf(imgURL.get(0)));
+
+                    //url에서 이미지 가져오기
+                    for (int i = 0; i < imgURL.size(); i++) {
+                        if (imgURL.get(i) != "noimg") {
+                            tourListImage[i] = getImageFromURL(imgURL.get(i));
+                        }
+                        if (imgURL.get(i).equals("noimg")) {
+                            tourListImage[i] = ContextCompat.getDrawable(getActivity(), R.drawable.noimage);
+                        }
                     }
-                    if (imgURL.get(i).equals("noimg")) {
-                        tourListImage[i] = ContextCompat.getDrawable(getActivity(), R.drawable.noimage);
-                    }
+                    Log.d("imgURL", String.valueOf(tourListImage[0]));
+
+                    getActivity().runOnUiThread(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            //메인 화면에 광광정보 출력
+                            gpsimg1.setImageDrawable(tourListImage[0]);
+                            gpsimg2.setImageDrawable(tourListImage[1]);
+                            gpsimg3.setImageDrawable(tourListImage[2]);
+                            gpsimg4.setImageDrawable(tourListImage[3]);
+
+                            gpsttl1.setText(tourListTitle.get(0));
+                            gpsttl2.setText(tourListTitle.get(1));
+                            gpsttl3.setText(tourListTitle.get(2));
+                            gpsttl4.setText(tourListTitle.get(3));
+                            update1.setClickable(true);
+
+                        }
+                    });
+
+                } else {
+
+                    getActivity().runOnUiThread(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            //메인 화면에 광광정보 출력
+                            gpsimg1.setImageDrawable(null);
+                            gpsimg2.setImageDrawable(null);
+                            gpsimg3.setImageDrawable(null);
+                            gpsimg4.setImageDrawable(null);
+
+                            gpsttl1.setText("NO INFO");
+                            gpsttl2.setText("NO INFO");
+                            gpsttl3.setText("NO INFO");
+                            gpsttl4.setText("NO INFO");
+                            update1.setClickable(true);
+
+                        }
+                    });
+
                 }
-                Log.d("imgURL", String.valueOf(tourListImage[0]));
-
-                getActivity().runOnUiThread(() -> {
-                    //메인 화면에 광광정보 출력
-                    gpsimg1.setImageDrawable(tourListImage[0]);
-                    gpsimg2.setImageDrawable(tourListImage[1]);
-                    gpsimg3.setImageDrawable(tourListImage[2]);
-                    gpsimg4.setImageDrawable(tourListImage[3]);
-
-                    gpsttl1.setText(tourListTitle.get(0));
-                    gpsttl2.setText(tourListTitle.get(1));
-                    gpsttl3.setText(tourListTitle.get(2));
-                    gpsttl4.setText(tourListTitle.get(3));
-                    update1.setClickable(true);
-
-                });
 
             }
         };
@@ -264,7 +247,7 @@ public class HomeFragment extends Fragment {
                 Log.d("imgURL", String.valueOf(imgURL2.get(0)));
 
                 //url에서 이미지 가져오기
-                for(int i = 0; i<imgURL2.size(); i++) {
+                for (int i = 0; i < imgURL2.size(); i++) {
                     if (imgURL2.get(i) != "noimg") {
                         tourListImage2[i] = getImageFromURL(imgURL2.get(i));
                     }
@@ -274,19 +257,23 @@ public class HomeFragment extends Fragment {
                 }
                 Log.d("imgURL", String.valueOf(tourListImage2[0]));
 
-                getActivity().runOnUiThread(() -> {
-                    //메인 화면에 광광정보 출력
-                    festimg1.setImageDrawable(tourListImage2[0]);
-                    festimg2.setImageDrawable(tourListImage2[1]);
-                    festimg3.setImageDrawable(tourListImage2[2]);
-                    festimg4.setImageDrawable(tourListImage2[3]);
+                getActivity().runOnUiThread(new Runnable() {
 
-                    festttl1.setText(tourListTitle2.get(0));
-                    festttl2.setText(tourListTitle2.get(1));
-                    festttl3.setText(tourListTitle2.get(2));
-                    festttl4.setText(tourListTitle2.get(3));
-                    update2.setClickable(true);
+                    @Override
+                    public void run() {
+                        //메인 화면에 광광정보 출력
+                        festimg1.setImageDrawable(tourListImage2[0]);
+                        festimg2.setImageDrawable(tourListImage2[1]);
+                        festimg3.setImageDrawable(tourListImage2[2]);
+                        festimg4.setImageDrawable(tourListImage2[3]);
 
+                        festttl1.setText(tourListTitle2.get(0));
+                        festttl2.setText(tourListTitle2.get(1));
+                        festttl3.setText(tourListTitle2.get(2));
+                        festttl4.setText(tourListTitle2.get(3));
+                        update2.setClickable(true);
+
+                    }
                 });
 
             }
@@ -294,222 +281,294 @@ public class HomeFragment extends Fragment {
         nThread.start();
 
         /* @@@@@@@@@@@@ 행사공연축제 업데이트 버튼 누를 시 받아오는 추천정보 @@@@@@@@@@*/
-        update2.setOnClickListener(v -> {
-            new Thread(() -> {
+        update2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
 
-                tourListTitle2.clear();
-                imgURL2.clear();
-                tourListContent2.clear();
-                contId2.clear();
-                contenttypeid2.clear();
-                addr2.clear();
-                mapx2.clear();
-                mapy2.clear();
+                        tourListTitle2.clear();
+                        imgURL2.clear();
+                        tourListContent2.clear();
+                        contId2.clear();
+                        contenttypeid2.clear();
+                        addr2.clear();
+                        mapx2.clear();
+                        mapy2.clear();
 
-                getActivity().runOnUiThread(() -> {
-                    //메인 화면에 광광정보 출력
-                    festimg1.setImageDrawable(null);
-                    festimg2.setImageDrawable(null);
-                    festimg3.setImageDrawable(null);
-                    festimg4.setImageDrawable(null);
+                        getActivity().runOnUiThread(new Runnable() {
 
-                    festttl1.setText("LOADING");
-                    festttl2.setText("LOADING");
-                    festttl3.setText("LOADING");
-                    festttl4.setText("LOADING");
+                            @Override
+                            public void run() {
+                                //메인 화면에 광광정보 출력
+                                festimg1.setImageDrawable(null);
+                                festimg2.setImageDrawable(null);
+                                festimg3.setImageDrawable(null);
+                                festimg4.setImageDrawable(null);
 
-                });
+                                festttl1.setText("LOADING");
+                                festttl2.setText("LOADING");
+                                festttl3.setText("LOADING");
+                                festttl4.setText("LOADING");
+                                update2.setClickable(false);
 
-            }).start();
+                            }
+                        });
 
-            //행사공연축제 api받아오기
-            new Thread(() -> {
-
-                getFestTourListData();
-
-                final Drawable[] tourListImage2 = new Drawable[imgURL2.size()];
-
-                Log.d("imgURL", String.valueOf(imgURL2.size()));
-                Log.d("tourListTitle", String.valueOf(tourListTitle2.size()));
-                Log.d("tourListContent", String.valueOf(tourListContent2.size()));
-                Log.d("contId", String.valueOf(contId2.size()));
-                Log.d("imgURL", String.valueOf(imgURL2.get(0)));
-
-                //url에서 이미지 가져오기
-
-                for (int i12 = 0; i12 < imgURL2.size(); i12++) {
-                    if (imgURL2.get(i12) != "noimg") {
-                        tourListImage2[i12] = getImageFromURL(imgURL2.get(i12));
                     }
-                    if (imgURL2.get(i12).equals("noimg")) {
-                        tourListImage2[i12] = ContextCompat.getDrawable(getActivity(), R.drawable.noimage);
+                }).start();
+
+                //행사공연축제 api받아오기
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        getFestTourListData();
+
+                        final Drawable[] tourListImage2 = new Drawable[imgURL2.size()];
+
+                        Log.d("imgURL", String.valueOf(imgURL2.size()));
+                        Log.d("tourListTitle", String.valueOf(tourListTitle2.size()));
+                        Log.d("tourListContent", String.valueOf(tourListContent2.size()));
+                        Log.d("contId", String.valueOf(contId2.size()));
+                        Log.d("imgURL", String.valueOf(imgURL2.get(0)));
+
+                        //url에서 이미지 가져오기
+
+                        for (int i = 0; i < imgURL2.size(); i++) {
+                            if (imgURL2.get(i) != "noimg") {
+                                tourListImage2[i] = getImageFromURL(imgURL2.get(i));
+                            }
+                            if (imgURL2.get(i).equals("noimg")) {
+                                tourListImage2[i] = ContextCompat.getDrawable(getActivity(), R.drawable.noimage);
+                            }
+                        }
+                        Log.d("imgURL", String.valueOf(tourListImage2[0]));
+
+                        getActivity().runOnUiThread(new Runnable() {
+
+                            @Override
+                            public void run() {
+                                //메인 화면에 광광정보 출력
+
+                                festimg1.setImageDrawable(tourListImage2[0]);
+                                festimg2.setImageDrawable(tourListImage2[1]);
+                                festimg3.setImageDrawable(tourListImage2[2]);
+                                festimg4.setImageDrawable(tourListImage2[3]);
+
+                                festttl1.setText(tourListTitle2.get(0));
+                                festttl2.setText(tourListTitle2.get(1));
+                                festttl3.setText(tourListTitle2.get(2));
+                                festttl4.setText(tourListTitle2.get(3));
+
+                            }
+                        });
+
                     }
-                }
-                Log.d("imgURL", String.valueOf(tourListImage2[0]));
-
-                getActivity().runOnUiThread(() -> {
-                    //메인 화면에 광광정보 출력
-
-                    festimg1.setImageDrawable(tourListImage2[0]);
-                    festimg2.setImageDrawable(tourListImage2[1]);
-                    festimg3.setImageDrawable(tourListImage2[2]);
-                    festimg4.setImageDrawable(tourListImage2[3]);
-
-                    festttl1.setText(tourListTitle2.get(0));
-                    festttl2.setText(tourListTitle2.get(1));
-                    festttl3.setText(tourListTitle2.get(2));
-                    festttl4.setText(tourListTitle2.get(3));
-
-                });
-
-            }).start();
+                }).start();
+            }
         });
 
         /* @@@@@@@@@@@@ 행사공연축제 더 보기 버튼 누를 시 동작 @@@@@@@@@@*/
-        more2.setOnClickListener(v -> new Thread(() -> {
+        more2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-            i.putExtra("tourListTitle", tourListTitle2);
-            i.putExtra("tourListImage", imgURL2);
-            i.putExtra("tourListContent", tourListContent2);
-            i.putExtra("contId", contId2);
-            i.putExtra("mapx", mapx2);
-            i.putExtra("mapy", mapy2);
-            i.putExtra("addr", addr2);
-            i.putExtra("totalCount", totalCount);
-            i.putExtra("contenttypeid", contenttypeid2);
-            i.putExtra("searchSort", searchSort2);
-            startActivity(i);
-        }).start());
+                new Thread(new Runnable() {
 
-        /* @@@@@@@@@@@@ gbs 업데이트 버튼 누를 시 받아오는 정보 @@@@@@@@@@*/
-        //내 주변 광광지 업데이트 버튼
-        update1.setOnClickListener(v -> {
+                    @Override
+                    public void run() {
 
-            new Thread(() -> {
+                        i.putExtra("tourListTitle", tourListTitle2);
+                        i.putExtra("tourListImage", imgURL2);
+                        i.putExtra("tourListContent", tourListContent2);
+                        i.putExtra("contId", contId2);
+                        i.putExtra("mapx", mapx2);
+                        i.putExtra("mapy", mapy2);
+                        i.putExtra("addr", addr2);
+                        i.putExtra("totalCount", totalCount);
+                        i.putExtra("contenttypeid", contenttypeid2);
+                        i.putExtra("searchSort", searchSort2);
+                        startActivity(i);
+                    }
+                }).start();
 
-                tourListTitle.clear();
-                imgURL.clear();
-                tourListContent.clear();
-                contId.clear();
-                contenttypeid.clear();
-                addr.clear();
-                mapx.clear();
-                mapy.clear();
-
-                getActivity().runOnUiThread(() -> {
-                    //메인 화면에 광광정보 출력
-                    gpsimg1.setImageDrawable(null);
-                    gpsimg2.setImageDrawable(null);
-                    gpsimg3.setImageDrawable(null);
-                    gpsimg4.setImageDrawable(null);
-
-                    gpsttl1.setText("LOADING");
-                    gpsttl2.setText("LOADING");
-                    gpsttl3.setText("LOADING");
-                    gpsttl4.setText("LOADING");
-
-                });
-
-            }).start();
-
-            //위치 관리자 객체 참조
-            final LocationManager lm1 = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-
-            final ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor(1);
-
-            //가장 최근 위치정보 & api받아오기
-            if (Build.VERSION.SDK_INT >= 23 &&
-                    ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                        0);
-            } else {
-                Location location = lm1.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                mylocateX = location.getLongitude();    //위도
-                mylocateY = location.getLatitude();      //경도
-
-                //위치정보 갱신
-                lm1.requestLocationUpdates(LocationManager.GPS_PROVIDER,
-                        1000,
-                        1,
-                        gpsLocationListener);
-                lm1.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
-                        1000,
-                        1,
-                        gpsLocationListener);
             }
+        });
 
-            //내 주변 광광지 api받아오기
-            new Thread(() -> {
+        /*@@@@@@@@@@@@ gbs 업데이트 버튼 누를 시 받아오는 정보 @@@@@@@@@@*/
+        //내 주변 광광지 업데이트 버튼
+        update1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-                getGpsTourListData();
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
 
-                final Drawable[] tourListImage = new Drawable[imgURL.size()];
+                        tourListTitle.clear();
+                        imgURL.clear();
+                        tourListContent.clear();
+                        contId.clear();
+                        contenttypeid.clear();
+                        addr.clear();
+                        mapx.clear();
+                        mapy.clear();
 
-                Log.d("imgURL", String.valueOf(imgURL.size()));
-                Log.d("tourListTitle", String.valueOf(tourListTitle.size()));
-                Log.d("tourListContent", String.valueOf(tourListContent.size()));
-                Log.d("contId", String.valueOf(contId.size()));
-                Log.d("imgURL", String.valueOf(imgURL.get(0)));
+                        getActivity().runOnUiThread(new Runnable() {
 
-                //url에서 이미지 가져오기
+                            @Override
+                            public void run() {
+                                //메인 화면에 광광정보 출력
+                                gpsimg1.setImageDrawable(null);
+                                gpsimg2.setImageDrawable(null);
+                                gpsimg3.setImageDrawable(null);
+                                gpsimg4.setImageDrawable(null);
 
-                for (int i1 = 0; i1 < imgURL.size(); i1++) {
-                    if (imgURL.get(i1) != "noimg") {
-                        tourListImage[i1] = getImageFromURL(imgURL.get(i1));
+                                gpsttl1.setText("LOADING");
+                                gpsttl2.setText("LOADING");
+                                gpsttl3.setText("LOADING");
+                                gpsttl4.setText("LOADING");
+                                update1.setClickable(false);
+
+                            }
+                        });
+
                     }
-                    if (imgURL.get(i1).equals("noimg")) {
-                        tourListImage[i1] = ContextCompat.getDrawable(getActivity(), R.drawable.noimage);
-                    }
+                }).start();
+
+                //위치 관리자 객체 참조
+                final LocationManager lm = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+
+                final ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor(1);
+
+                //가장 최근 위치정보 & api받아오기
+                if (Build.VERSION.SDK_INT >= 23 &&
+                        ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                            0);
+                } else {
+                    Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                    mylocateX = location.getLongitude();    //위도
+                    mylocateY = location.getLatitude();      //경도
+
+                    //위치정보 갱신
+                    lm.requestLocationUpdates(LocationManager.GPS_PROVIDER,
+                            1000,
+                            1,
+                            gpsLocationListener);
+                    lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
+                            1000,
+                            1,
+                            gpsLocationListener);
                 }
-                Log.d("imgURL", String.valueOf(tourListImage[0]));
 
-                getActivity().runOnUiThread(() -> {
-                    //메인 화면에 광광정보 출력
+                //내 주변 광광지 api받아오기
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
 
-                    gpsimg1.setImageDrawable(tourListImage[0]);
-                    gpsimg2.setImageDrawable(tourListImage[1]);
-                    gpsimg3.setImageDrawable(tourListImage[2]);
-                    gpsimg4.setImageDrawable(tourListImage[3]);
+                        getGpsTourListData();
 
-                    gpsttl1.setText(tourListTitle.get(0));
-                    gpsttl2.setText(tourListTitle.get(1));
-                    gpsttl3.setText(tourListTitle.get(2));
-                    gpsttl4.setText(tourListTitle.get(3));
+                        final Drawable[] tourListImage = new Drawable[imgURL.size()];
 
-                });
+                        if ( contId.size() != 0 ) {
 
-            }).start();
+                            Log.d("imgURL", String.valueOf(imgURL.size()));
+                            Log.d("tourListTitle", String.valueOf(tourListTitle.size()));
+                            Log.d("tourListContent", String.valueOf(tourListContent.size()));
+                            Log.d("contId", String.valueOf(contId.size()));
+                            Log.d("imgURL", String.valueOf(imgURL.get(0)));
+
+                            //url에서 이미지 가져오기
+
+                            for (int i = 0; i < imgURL.size(); i++) {
+                                if (imgURL.get(i) != "noimg") {
+                                    tourListImage[i] = getImageFromURL(imgURL.get(i));
+                                }
+                                if (imgURL.get(i).equals("noimg")) {
+                                    tourListImage[i] = ContextCompat.getDrawable(getActivity(), R.drawable.noimage);
+                                }
+                            }
+                            Log.d("imgURL", String.valueOf(tourListImage[0]));
+
+                            getActivity().runOnUiThread(new Runnable() {
+
+                                @Override
+                                public void run() {
+                                    //메인 화면에 광광정보 출력
+
+                                    gpsimg1.setImageDrawable(tourListImage[0]);
+                                    gpsimg2.setImageDrawable(tourListImage[1]);
+                                    gpsimg3.setImageDrawable(tourListImage[2]);
+                                    gpsimg4.setImageDrawable(tourListImage[3]);
+
+                                    gpsttl1.setText(tourListTitle.get(0));
+                                    gpsttl2.setText(tourListTitle.get(1));
+                                    gpsttl3.setText(tourListTitle.get(2));
+                                    gpsttl4.setText(tourListTitle.get(3));
+
+                                }
+                            });
+
+                        } else {
+
+                            getActivity().runOnUiThread(new Runnable() {
+
+                                @Override
+                                public void run() {
+                                    //메인 화면에 광광정보 출력
+                                    gpsimg1.setImageDrawable(null);
+                                    gpsimg2.setImageDrawable(null);
+                                    gpsimg3.setImageDrawable(null);
+                                    gpsimg4.setImageDrawable(null);
+
+                                    gpsttl1.setText("NO INFO");
+                                    gpsttl2.setText("NO INFO");
+                                    gpsttl3.setText("NO INFO");
+                                    gpsttl4.setText("NO INFO");
+                                    update1.setClickable(true);
+
+                                }
+                            });  //if
+
+                        }
+
+                    }
+                }).start();
+            }
         });
 
         /* @@@@@@@@@@@@ gps 더 보기 버튼 누를 시 동작 @@@@@@@@@@*/
-        more1.setOnClickListener(v -> new Thread(() -> {
+        more1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-            i.putExtra("tourListTitle", tourListTitle);
-            i.putExtra("tourListImage", imgURL);
-            i.putExtra("tourListContent", tourListContent);
-            i.putExtra("contId", contId);
-            i.putExtra("mapx", mapx);
-            i.putExtra("mapy", mapy);
-            i.putExtra("addr", addr);
-            i.putExtra("totalCount", totalCount);
-            i.putExtra("contenttypeid", contenttypeid);
-            i.putExtra("searchSort", searchSort1);
-            startActivity(i);
-        }).start());
+                new Thread(new Runnable() {
+
+                    @Override
+                    public void run() {
+
+                        i.putExtra("tourListTitle", tourListTitle);
+                        i.putExtra("tourListImage", imgURL);
+                        i.putExtra("tourListContent", tourListContent);
+                        i.putExtra("contId", contId);
+                        i.putExtra("mapx", mapx);
+                        i.putExtra("mapy", mapy);
+                        i.putExtra("addr", addr);
+                        i.putExtra("totalCount", totalCount);
+                        i.putExtra("contenttypeid", contenttypeid);
+                        i.putExtra("searchSort", searchSort1);
+                        startActivity(i);
+                    }
+                }).start();
+
+            }
+        });
 
 
         return view;
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case MY_PERMISSIONS_REQUEST_READ_CONTACTS: {
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                }
-                return;
-            }
-        }
     }
 
     //위치 리스너

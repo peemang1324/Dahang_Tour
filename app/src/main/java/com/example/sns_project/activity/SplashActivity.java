@@ -6,12 +6,13 @@ import android.os.Handler;
 import android.view.WindowManager;
 
 import com.example.sns_project.R;
+import com.facebook.login.Login;
 
 public class SplashActivity extends BasicActivity {
 
     Handler handler = new Handler();
     Runnable runnable = () -> {
-        Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+        Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
 //            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         startActivity(intent);
         finish();

@@ -1,4 +1,4 @@
-package com.example.sns_project.activity;
+package com.example.sns_project.activity.tour_api;
 
 import android.content.Intent;
 import android.os.Bundle;
