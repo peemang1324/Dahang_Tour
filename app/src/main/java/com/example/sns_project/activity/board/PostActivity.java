@@ -33,7 +33,7 @@ public class PostActivity extends BasicActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        super.onCreate(savedInstanceState);//aa
         setContentView(R.layout.activity_post);
 
         PostInfo postInfo = (PostInfo) getIntent().getSerializableExtra("postInfo");
