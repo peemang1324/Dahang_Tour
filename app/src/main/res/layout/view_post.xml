@@ -59,31 +59,31 @@
         android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
         android:background="#DDDDDD"/>
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/tv_guide_hour"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:textStyle="bold"
-        android:textColor="@color/colorBluegreen"
-        android:fontFamily="@font/nanumsquare_otfr"
-        tools:text="가능한 시간" />
-    <TextView
-        android:id="@+id/tv_guide_pay"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:textStyle="bold"
-        android:gravity="right"
-        android:textColor="@color/colorDeepYellow"
-        android:fontFamily="@font/nanumsquare_otfr"
-        tools:text="시간당 금액" />
-</LinearLayout>
+        <TextView
+            android:id="@+id/tv_guide_hour"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textStyle="bold"
+            android:textColor="@color/colorBluegreen"
+            android:fontFamily="@font/nanumsquare_otfr"
+            tools:text="가능한 시간" />
+        <TextView
+            android:id="@+id/tv_guide_pay"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textStyle="bold"
+            android:gravity="right"
+            android:textColor="@color/colorDeepYellow"
+            android:fontFamily="@font/nanumsquare_otfr"
+            tools:text="시간당 금액" />
+    </LinearLayout>
     <LinearLayout
         android:id="@+id/ll_contents"
         android:layout_width="match_parent"
@@ -97,5 +97,13 @@
         android:layout_height="wrap_content"
         android:gravity="end"
         tools:text="2019-00-00" />
+
+    <ImageButton
+        android:id="@+id/btn_board_chat"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="right"
+        android:background="@drawable/ic_board_chat"
+        android:tint="#6AC2CF" />
 
 </LinearLayout>

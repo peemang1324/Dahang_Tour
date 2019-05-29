@@ -106,7 +106,7 @@ public class MessageActivity extends AppCompatActivity {
             if (!msg.equals("")){
                 sendMessage(fuser.getUid(), userid, msg, message_timestamp);
             } else {
-                Toast.makeText(MessageActivity.this, "You can't send empty message", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MessageActivity.this, "메세지를 입력해주세요", Toast.LENGTH_SHORT).show();
             }
             text_send.setText("");
         });
@@ -179,8 +179,8 @@ public class MessageActivity extends AppCompatActivity {
                 .child(userid);
 
         final DatabaseReference chatRef2 = FirebaseDatabase.getInstance().getReference("Chatlist")
-                .child(fuser.getUid())
-                .child(userid);
+                .child(receiver)
+                .child(fuser.getUid());
 
         chatRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
