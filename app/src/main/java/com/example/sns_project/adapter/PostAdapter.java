@@ -102,7 +102,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
 
         fuser = FirebaseAuth.getInstance().getCurrentUser();
         firebaseFirestore = FirebaseFirestore.getInstance(); //firestore 초기화(DataBase)
-        DocumentReference docRef = firebaseFirestore.collection("users").document(fuser.getUid());
+        DocumentReference docRef = firebaseFirestore.collection("users").document(mDataset.get(position).getPublisher());
         docRef.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 DocumentSnapshot document = task.getResult();

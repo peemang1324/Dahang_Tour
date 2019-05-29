@@ -13,6 +13,7 @@ import com.example.sns_project.activity.BasicActivity;
 import com.example.sns_project.activity.login.MemberInitActivity;
 import com.example.sns_project.activity.login.SignUpActivity;
 import com.example.sns_project.adapter.PostAdapter;
+import com.example.sns_project.info.BoardInfo;
 import com.example.sns_project.info.PostInfo;
 import com.example.sns_project.listener.OnPostListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -142,29 +143,129 @@ public class TourlistBoardActivity extends BasicActivity {
 
     private void postUpdate() { //게시물 갱신 메소드
         if (firebaseUser != null) { //사용자가 로그인 되었다면
-            CollectionReference collectionReference = firebaseFirestore.collection("tourlist_posts").document(apiId).collection("board");
-            collectionReference
-                    .orderBy("createdAt", Query.Direction.DESCENDING).get() //데이터 내림차순 정렬
-                    .addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            postList.clear(); //ArrayList 초기화
-                            for (QueryDocumentSnapshot document : task.getResult()) { //게시글 데이터 설정
-                                Log.d(SYSTMEM_LOG, document.getId() + " => " + document.getData());
-                                postList.add(new PostInfo(
-                                        document.getData().get("title").toString(), //게시글 제목
-                                        document.getData().get("guidePay").toString(),
-                                        document.getData().get("guideHour").toString(),
-                                        document.getData().get("car").toString(),
-                                        (ArrayList<String>) document.getData().get("contents"), //게시글 내용
-                                        document.getData().get("publisher").toString(), //게시글을 생성한 유저
-                                        new Date(document.getDate("createdAt").getTime()), //게시글 생성일자
-                                        document.getId())); //게시글 ID
+
+            if(apiId != null){
+                BoardInfo boardInfo = new BoardInfo(apiId, apiTitle);
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                db.collection("tourlist_board_list").document(apiId).set(boardInfo)
+                        .addOnSuccessListener(aVoid -> { });
+
+                CollectionReference collectionReference = firebaseFirestore.collection("tourlist_posts").document(apiId).collection("board");
+                collectionReference
+                        .orderBy("createdAt", Query.Direction.DESCENDING).get() //데이터 내림차순 정렬
+                        .addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                postList.clear(); //ArrayList 초기화
+                                for (QueryDocumentSnapshot document : task.getResult()) { //게시글 데이터 설정
+                                    Log.d(SYSTMEM_LOG, document.getId() + " => " + document.getData());
+                                    postList.add(new PostInfo(
+                                            document.getData().get("title").toString(), //게시글 제목
+                                            document.getData().get("guidePay").toString(),
+                                            document.getData().get("guideHour").toString(),
+                                            document.getData().get("car").toString(),
+                                            (ArrayList<String>) document.getData().get("contents"), //게시글 내용
+                                            document.getData().get("publisher").toString(), //게시글을 생성한 유저
+                                            new Date(document.getDate("createdAt").getTime()), //게시글 생성일자
+                                            document.getId())); //게시글 ID
+                                }
+                                postAdapter.notifyDataSetChanged(); //어뎁터를 통해서 데이터 갱신
+                            } else {
+                                Log.d(SYSTMEM_LOG, "Error getting documents: ", task.getException());
                             }
-                            postAdapter.notifyDataSetChanged(); //어뎁터를 통해서 데이터 갱신
-                        } else {
-                            Log.d(SYSTMEM_LOG, "Error getting documents: ", task.getException());
-                        }
-                    });
+                        });
+            }{ //전체보기로 했을 경우
+
+                CollectionReference collectionReference = firebaseFirestore.collection("guide_posts").document("1095732").collection("board");
+                collectionReference
+                        .orderBy("createdAt", Query.Direction.DESCENDING).get() //데이터 내림차순 정렬
+                        .addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                postList.clear(); //ArrayList 초기화
+                                for (QueryDocumentSnapshot document : task.getResult()) { //게시글 데이터 설정
+                                    Log.d(SYSTMEM_LOG, document.getId() + " => " + document.getData());
+                                    postList.add(new PostInfo(
+                                            document.getData().get("title").toString(), //게시글 제목
+                                            document.getData().get("guidePay").toString(),
+                                            document.getData().get("guideHour").toString(),
+                                            document.getData().get("car").toString(),
+                                            (ArrayList<String>) document.getData().get("contents"), //게시글 내용
+                                            document.getData().get("publisher").toString(), //게시글을 생성한 유저
+                                            new Date(document.getDate("createdAt").getTime()), //게시글 생성일자
+                                            document.getId())); //게시글 ID
+                                }
+                            } else {
+                                Log.d(SYSTMEM_LOG, "Error getting documents: ", task.getException());
+                            }
+                        });
+
+                collectionReference = firebaseFirestore.collection("guide_posts").document("125616").collection("board");
+                collectionReference
+                        .orderBy("createdAt", Query.Direction.DESCENDING).get() //데이터 내림차순 정렬
+                        .addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                for (QueryDocumentSnapshot document : task.getResult()) { //게시글 데이터 설정
+                                    Log.d(SYSTMEM_LOG, document.getId() + " => " + document.getData());
+                                    postList.add(new PostInfo(
+                                            document.getData().get("title").toString(), //게시글 제목
+                                            document.getData().get("guidePay").toString(),
+                                            document.getData().get("guideHour").toString(),
+                                            document.getData().get("car").toString(),
+                                            (ArrayList<String>) document.getData().get("contents"), //게시글 내용
+                                            document.getData().get("publisher").toString(), //게시글을 생성한 유저
+                                            new Date(document.getDate("createdAt").getTime()), //게시글 생성일자
+                                            document.getId())); //게시글 ID
+                                }
+                            } else {
+                                Log.d(SYSTMEM_LOG, "Error getting documents: ", task.getException());
+                            }
+                        });
+
+                collectionReference = firebaseFirestore.collection("guide_posts").document("2028440").collection("board");
+                collectionReference
+                        .orderBy("createdAt", Query.Direction.DESCENDING).get() //데이터 내림차순 정렬
+                        .addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                for (QueryDocumentSnapshot document : task.getResult()) { //게시글 데이터 설정
+                                    Log.d(SYSTMEM_LOG, document.getId() + " => " + document.getData());
+                                    postList.add(new PostInfo(
+                                            document.getData().get("title").toString(), //게시글 제목
+                                            document.getData().get("guidePay").toString(),
+                                            document.getData().get("guideHour").toString(),
+                                            document.getData().get("car").toString(),
+                                            (ArrayList<String>) document.getData().get("contents"), //게시글 내용
+                                            document.getData().get("publisher").toString(), //게시글을 생성한 유저
+                                            new Date(document.getDate("createdAt").getTime()), //게시글 생성일자
+                                            document.getId())); //게시글 ID
+                                }
+                            } else {
+                                Log.d(SYSTMEM_LOG, "Error getting documents: ", task.getException());
+                            }
+                        });
+
+                collectionReference = firebaseFirestore.collection("guide_posts").document("2050213").collection("board");
+                collectionReference
+                        .orderBy("createdAt", Query.Direction.DESCENDING).get() //데이터 내림차순 정렬
+                        .addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                for (QueryDocumentSnapshot document : task.getResult()) { //게시글 데이터 설정
+                                    Log.d(SYSTMEM_LOG, document.getId() + " => " + document.getData());
+                                    postList.add(new PostInfo(
+                                            document.getData().get("title").toString(), //게시글 제목
+                                            document.getData().get("guidePay").toString(),
+                                            document.getData().get("guideHour").toString(),
+                                            document.getData().get("car").toString(),
+                                            (ArrayList<String>) document.getData().get("contents"), //게시글 내용
+                                            document.getData().get("publisher").toString(), //게시글을 생성한 유저
+                                            new Date(document.getDate("createdAt").getTime()), //게시글 생성일자
+                                            document.getId())); //게시글 ID
+                                }
+                                postAdapter.notifyDataSetChanged(); //어뎁터를 통해서 데이터 갱신
+                            } else {
+                                Log.d(SYSTMEM_LOG, "Error getting documents: ", task.getException());
+                            }
+                        });
+            }
+
         }
     }
 

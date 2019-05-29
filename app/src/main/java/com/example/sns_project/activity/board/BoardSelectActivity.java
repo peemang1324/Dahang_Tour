@@ -32,6 +32,8 @@ public class BoardSelectActivity extends BasicActivity {
 
     private void myStartActivity(Class c){ //원하는 Activity로 이동시켜주는 메소드
         Intent intent = new Intent(this, c);
+        intent.putExtra("contentId", "default");
+        intent.putExtra("contentTitle", "전체 게시판");
         startActivity(intent);
     }
 }
