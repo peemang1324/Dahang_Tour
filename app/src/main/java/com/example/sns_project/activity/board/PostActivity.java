@@ -12,6 +12,10 @@ import com.bumptech.glide.Glide;
 import com.example.sns_project.activity.BasicActivity;
 import com.example.sns_project.info.PostInfo;
 import com.example.sns_project.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.StorageReference;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -20,6 +24,7 @@ import java.util.Locale;
 import static com.example.sns_project.Util.isStorageUrl;
 
 public class PostActivity extends BasicActivity {
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,7 +32,12 @@ public class PostActivity extends BasicActivity {
 
         PostInfo postInfo = (PostInfo) getIntent().getSerializableExtra("postInfo");
         TextView titleTextView = findViewById(R.id.tv_title);
+        TextView guidePay = findViewById(R.id.tv_guide_pay);
+        TextView guideHour = findViewById(R.id.tv_guide_hour);
+
         titleTextView.setText(postInfo.getTitle());
+        guidePay.setText("시간당 " + postInfo.getGuidePay() + "(원)");
+        guideHour.setText("가능한 시간: " +postInfo.getGuideHour());
 
         TextView createdAtTextView = findViewById(R.id.tv_createdAt);
         createdAtTextView.setText(new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(postInfo.getCreatedAt()));
@@ -35,6 +45,8 @@ public class PostActivity extends BasicActivity {
         LinearLayout contentsLayout = findViewById(R.id.ll_contents);
         ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         ArrayList<String> contentsList = postInfo.getContents();
+
+
 
         if (contentsLayout.getTag() == null || !contentsLayout.getTag().equals(contentsList)) {
             contentsLayout.setTag(contentsList);

@@ -1,13 +1,13 @@
-package com.example.sns_project.activity;
+package com.example.sns_project.activity.login;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.sns_project.R;
+import com.example.sns_project.activity.BasicActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;

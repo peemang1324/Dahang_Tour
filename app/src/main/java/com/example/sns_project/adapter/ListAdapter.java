@@ -124,11 +124,13 @@ public class ListAdapter extends BaseAdapter {
           if(userType.equals("tourlist")){
               intent = new Intent(context, com.example.sns_project.activity.board.TourlistBoardActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
               intent.putExtra("contentId", listViewItem.getContId());
+              intent.putExtra("contentTitle", listViewItem.getContitle());
               context.startActivity(intent);
           }else{
               intent = new Intent(context, com.example.sns_project.activity.board.GuideBoardActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
               intent.putExtra("contentId", listViewItem.getContId());
-              Log.e("api", listViewItem.getContId());
+              intent.putExtra("contentTitle", listViewItem.getContitle());
+              Log.e("abc", listViewItem.getContitle());
               context.startActivity(intent);
           }
         });

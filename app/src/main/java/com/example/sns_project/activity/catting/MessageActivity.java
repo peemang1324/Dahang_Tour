@@ -14,7 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.example.sns_project.activity.MainActivity;
+import com.example.sns_project.activity.login.MainActivity;
 import com.example.sns_project.adapter.MessageAdapter;
 import com.example.sns_project.fragment.APIService;
 import com.example.sns_project.info.Chat;
@@ -178,11 +178,16 @@ public class MessageActivity extends AppCompatActivity {
                 .child(fuser.getUid())
                 .child(userid);
 
+        final DatabaseReference chatRef2 = FirebaseDatabase.getInstance().getReference("Chatlist")
+                .child(fuser.getUid())
+                .child(userid);
+
         chatRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (!dataSnapshot.exists()){
                     chatRef.child("id").setValue(userid);
+                    chatRef2.child("id").setValue(fuser.getUid());
                 }
             }
 

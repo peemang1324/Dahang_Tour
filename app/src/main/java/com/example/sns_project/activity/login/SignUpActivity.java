@@ -1,4 +1,4 @@
-package com.example.sns_project.activity;
+package com.example.sns_project.activity.login;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,10 +9,9 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.example.sns_project.R;
+import com.example.sns_project.activity.BasicActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-
-import java.util.HashMap;
 
 import static com.example.sns_project.Util.showToast;
 

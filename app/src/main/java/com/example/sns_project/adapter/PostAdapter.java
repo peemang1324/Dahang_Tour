@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.View;
@@ -20,20 +21,28 @@ import com.example.sns_project.info.PostInfo;
 import com.example.sns_project.R;
 import com.example.sns_project.activity.board.PostActivity;
 import com.example.sns_project.listener.OnPostListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Locale;
 
+import static com.example.sns_project.Util.SYSTMEM_LOG;
 import static com.example.sns_project.Util.isStorageUrl;
 
 
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder> {
     private ArrayList<PostInfo> mDataset;
     private Activity activity;
-    private String apiId, apiTitle;
-
+    private FirebaseUser fuser;
+    private FirebaseFirestore firebaseFirestore;
     private OnPostListener onPostListener;
+    private String tour;
+    private String apiId, apiTitle;
 
     static class PostViewHolder extends RecyclerView.ViewHolder {
         CardView cardView;
@@ -44,9 +53,11 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         }
     }
 
-    public PostAdapter(Activity activity, ArrayList<PostInfo> myDataset) {
+    public PostAdapter(Activity activity, ArrayList<PostInfo> myDataset, String apiId, String apiTitle) {
         this.mDataset = myDataset;
         this.activity = activity;
+        this.apiId = apiId;
+        this.apiTitle = apiTitle;
     }
 
     //Listener setter
@@ -79,12 +90,31 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
     public void onBindViewHolder(@NonNull final PostViewHolder holder, int position) {
         CardView cardView = holder.cardView;
         //제목 가져오기
+        Log.e("abc", "api: " + apiTitle);
         TextView titleTextView = cardView.findViewById(R.id.tv_title);
         titleTextView.setText(mDataset.get(position).getTitle());
         TextView guidePay = cardView.findViewById(R.id.tv_guide_pay);
         guidePay.setText("시간당 " + mDataset.get(position).getGuidePay() + " (원)");
         TextView guideHour = cardView.findViewById(R.id.tv_guide_hour);
+        TextView publisher = cardView.findViewById(R.id.tv_post_publisher);
         guideHour.setText("가능한 시간: " + mDataset.get(position).getGuideHour());
+
+
+        fuser = FirebaseAuth.getInstance().getCurrentUser();
+        firebaseFirestore = FirebaseFirestore.getInstance(); //firestore 초기화(DataBase)
+        DocumentReference docRef = firebaseFirestore.collection("users").document(fuser.getUid());
+        docRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot document = task.getResult();
+                if (document.exists()) {
+                    publisher.setText(document.getData().get("name").toString());
+                } else {
+                    Log.d(SYSTMEM_LOG, "No such document");
+                }
+            } else {
+                Log.d(SYSTMEM_LOG, "get failed with ", task.getException());
+            }
+        });
 
         //게시글 생성날짜 가져오기
         TextView createdAtTextView = cardView.findViewById(R.id.tv_createdAt);

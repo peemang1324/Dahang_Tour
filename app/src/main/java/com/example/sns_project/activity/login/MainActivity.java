@@ -1,4 +1,4 @@
-package com.example.sns_project.activity;
+package com.example.sns_project.activity.login;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -10,6 +10,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.example.sns_project.activity.BasicActivity;
+import com.example.sns_project.activity.tour_api.SearchActivity;
 import com.example.sns_project.activity.board.BoardSelectActivity;
 import com.example.sns_project.fragment.ChatsFragment;
 import com.example.sns_project.fragment.HomeFragment;

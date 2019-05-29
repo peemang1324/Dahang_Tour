@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.sns_project.activity;
+package com.example.sns_project.activity.camara;
 
 import android.app.Activity;
 import android.content.Intent;

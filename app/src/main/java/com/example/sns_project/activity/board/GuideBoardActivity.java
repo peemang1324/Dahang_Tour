@@ -7,11 +7,12 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
 import com.example.sns_project.R;
 import com.example.sns_project.activity.BasicActivity;
-import com.example.sns_project.activity.MemberInitActivity;
-import com.example.sns_project.activity.SignUpActivity;
+import com.example.sns_project.activity.login.MemberInitActivity;
+import com.example.sns_project.activity.login.SignUpActivity;
 import com.example.sns_project.adapter.PostAdapter;
 import com.example.sns_project.info.PostInfo;
 import com.example.sns_project.listener.OnPostListener;
@@ -43,7 +44,7 @@ public class GuideBoardActivity extends BasicActivity {
     private ArrayList<PostInfo> postList; //게시물 ArrayList
     StorageReference storageRef;
     private int storageDeleteCount;
-    private String apiId;
+    private String apiId, apiTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,39 +57,38 @@ public class GuideBoardActivity extends BasicActivity {
         Intent intent = getIntent();
 
         apiId = intent.getExtras().getString("contentId");
-
-        Log.e(SYSTMEM_LOG, "api: " + apiId);
+        apiTitle = intent.getExtras().getString("contentTitle");
+        Log.e("abc", "api: " + apiTitle);
 
         if (firebaseUser == null) {
             myStartActivity(SignUpActivity.class);
         } else {
             firebaseFirestore = FirebaseFirestore.getInstance();
             DocumentReference documentReference = firebaseFirestore.collection("users").document(firebaseUser.getUid());
-            documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                    if (task.isSuccessful()) {
-                        DocumentSnapshot document = task.getResult();
-                        if (document != null) {
-                            if (document.exists()) {
-                            } else {
-                                myStartActivity(MemberInitActivity.class);
-                            }
+            documentReference.get().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document != null) {
+                        if (document.exists()) {
+                        } else {
+                            myStartActivity(MemberInitActivity.class);
                         }
-                    } else {
                     }
+                } else {
                 }
             });
         }
 
         postList = new ArrayList<>(); //게시물 리스트 초기화
-        postAdapter = new PostAdapter(GuideBoardActivity.this, postList); //게시물 Adapter 초기화
+        postAdapter = new PostAdapter(GuideBoardActivity.this, postList, apiId, apiTitle); //게시물 Adapter 초기화
         postAdapter.setOnPostListener(onPostListener); //Listener 전달
 
         //게시글 추가 버튼
         RecyclerView recyclerView = findViewById(R.id.rv_post);
         findViewById(R.id.floatingActionButton).setOnClickListener(onClickListener);
 
+       TextView boardTitle = findViewById(R.id.tv_post_guide_title);
+        boardTitle.setText(apiTitle);
         //recyclerView 갱신
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(GuideBoardActivity.this));
@@ -171,7 +171,7 @@ public class GuideBoardActivity extends BasicActivity {
                                 Log.d(SYSTMEM_LOG, "Error getting documents: ", task.getException());
                             }
                         });
-            }else{
+            }else{ //전체보기로 했을 경우
                 CollectionReference collectionReference = firebaseFirestore.collection("guide_posts");
                 collectionReference
                         .orderBy("createdAt", Query.Direction.DESCENDING).get() //데이터 내림차순 정렬

@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.sns_project.activity.MainActivity"
+    tools:context="com.example.sns_project.activity.login.MainActivity"
     android:background="@drawable/sigunup_background">
 
     <FrameLayout

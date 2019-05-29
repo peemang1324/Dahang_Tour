@@ -8,10 +8,33 @@
     android:background="@drawable/sigunup_background"
     android:orientation="vertical">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_post"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_post_guide_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="24dp"
+            android:textColor="@android:color/black"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:padding="5dp"
+            android:fontFamily="@font/saemael"
+            android:background="@drawable/corner"
+            android:layout_marginBottom="5dp"/>
+
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_post"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+
+    </LinearLayout>
+
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/floatingActionButton"

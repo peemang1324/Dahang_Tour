@@ -14,7 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.example.sns_project.activity.LoginActivity;
+import com.example.sns_project.activity.login.LoginActivity;
 import com.example.sns_project.info.MemberInfo;
 import com.example.sns_project.info.User;
 import com.example.sns_project.R;
@@ -108,15 +108,21 @@ public class ProfileFragment extends Fragment {
                     String phoneNumStr = document.getData().get("phone_number").toString();
                     String birthDayStr = document.getData().get("birthday").toString();
 
-                    birthday.setText(birthDayStr.substring(0,4) + "년 " + birthDayStr.substring(4,6) + "월 " + birthDayStr.substring(6,8) + "일");//게시글 제목
-                    address.setText(document.getData().get("address").toString());
-                    //phoneNumber.setText();
-                    phoneNumber.setText(phoneNumStr.substring(0,3) + "-" + phoneNumStr.substring(3,7) + "-" + phoneNumStr.substring(7,11));
+                        birthday.setText(birthDayStr.substring(0,4) + "년 " + birthDayStr.substring(4,6) + "월 " + birthDayStr.substring(6,8) + "일");//게시글 제목
 
-                    if(document.getData().get("gender").toString() == "male"){
-                        gender.setText("남성");
-                    }else{
+
+                        phoneNumber.setText(phoneNumStr.substring(0,3) + "-" + phoneNumStr.substring(3,7) + "-" + phoneNumStr.substring(7,11));
+
+                        address.setText(document.getData().get("address").toString());
+
+
+                    //phoneNumber.setText();
+
+
+                    if(document.getData().get("gender").toString().equals("female")){
                         gender.setText("여성");
+                    }else{
+                        gender.setText("남성");
                     }
                 } else {
                     Log.d("abcd", "No such document");
@@ -132,7 +138,7 @@ public class ProfileFragment extends Fragment {
 
     View.OnClickListener onClickListener = v -> {
         switch (v.getId()){
-            case R.id.bt_login:
+            case R.id.bt_logout:
                 logout();
                 break;
         }

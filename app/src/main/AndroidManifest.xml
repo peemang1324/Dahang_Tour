@@ -28,7 +28,7 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAb5nDn3AoU7RntCxaxPTKSY7t9aiO3FDQ"/> <!-- 구글맵 키 -->
 
-        <activity android:name=".activity.SplashActivity"> <!-- Start Activity -->
+        <activity android:name=".activity.login.SplashActivity"> <!-- Start Activity -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -45,13 +45,13 @@
                     android:scheme="http" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.LoginActivity" />
-        <activity android:name=".activity.SignUpActivity" />
-        <activity android:name=".activity.PasswordReset" />
-        <activity android:name=".activity.MemberInitActivity" />
-        <activity android:name=".activity.MainActivity" />
-        <activity android:name=".activity.CameraActivity" />
-        <activity android:name=".activity.GalleryActivity" />
+        <activity android:name=".activity.login.LoginActivity" />
+        <activity android:name=".activity.login.SignUpActivity" />
+        <activity android:name=".activity.login.PasswordReset" />
+        <activity android:name=".activity.login.MemberInitActivity" />
+        <activity android:name=".activity.login.MainActivity" />
+        <activity android:name=".activity.camara.CameraActivity" />
+        <activity android:name=".activity.camara.GalleryActivity" />
         <activity android:name=".activity.BasicActivity" />
         <activity android:name=".activity.board.WriteGuidePostActivity" />
         <activity android:name=".activity.board.WriteTourlistPostActivity" />
@@ -63,10 +63,10 @@
         <activity android:name=".activity.tour_api.GetOtherimgActivity"/>
         <activity android:name=".activity.tour_api.MapMarkerActivity"/>
         <activity android:name=".activity.tour_api.KeywordActivity"/>
-        <activity android:name=".activity.SearchActivity"/>
+        <activity android:name=".activity.tour_api.SearchActivity"/>
         <activity android:name=".activity.tour_api.GpsFestTourlistActivity"/>
         <activity android:name=".activity.board.GuideBoardActivity"/>
-        <activity android:name=".activity.NameActivity"/>
+        <activity android:name=".activity.login.NameActivity"/>
         <activity android:name=".activity.board.BoardSelectActivity"/>
         <activity android:name=".activity.board.TourlistBoardActivity"/>
 

@@ -1,4 +1,4 @@
-package com.example.sns_project.activity;
+package com.example.sns_project.activity.tour_api;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -13,8 +13,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.sns_project.R;
-import com.example.sns_project.activity.tour_api.KeywordActivity;
-import com.example.sns_project.activity.tour_api.TourListActivity;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;

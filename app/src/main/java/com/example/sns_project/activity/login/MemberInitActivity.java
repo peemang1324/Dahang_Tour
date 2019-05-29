@@ -1,10 +1,9 @@
-package com.example.sns_project.activity;
+package com.example.sns_project.activity.login;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
@@ -15,11 +14,12 @@ import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 
 import com.bumptech.glide.Glide;
+import com.example.sns_project.activity.BasicActivity;
+import com.example.sns_project.activity.camara.CameraActivity;
+import com.example.sns_project.activity.camara.GalleryActivity;
 import com.example.sns_project.info.MemberInfo;
 import com.example.sns_project.R;
 import com.example.sns_project.info.User;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -33,7 +33,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.util.HashMap;
 
 import static com.example.sns_project.Util.INTENT_PATH;
 import static com.example.sns_project.Util.showToast;

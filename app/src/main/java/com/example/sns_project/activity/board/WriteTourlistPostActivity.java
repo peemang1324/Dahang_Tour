@@ -16,7 +16,7 @@ import android.widget.RelativeLayout;
 import com.bumptech.glide.Glide;
 import com.example.sns_project.R;
 import com.example.sns_project.activity.BasicActivity;
-import com.example.sns_project.activity.GalleryActivity;
+import com.example.sns_project.activity.camara.GalleryActivity;
 import com.example.sns_project.info.PostInfo;
 import com.example.sns_project.view.ContentsItemView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -56,13 +56,16 @@ public class WriteTourlistPostActivity extends BasicActivity {
     private String car;
     private RelativeLayout rl_post_background, loaderLayout;
     private int pathCount, successCount;
-    PostInfo postInfo;
+    private PostInfo postInfo;
+    private String apiId;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_guide_write_post);
 
+        Intent intent = getIntent();
+        apiId = intent.getStringExtra("apiId");
 
 
         loaderLayout = findViewById(R.id.loaderLayout);
@@ -213,7 +216,8 @@ public class WriteTourlistPostActivity extends BasicActivity {
             StorageReference storageRef = storage.getReference();
             FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
 
-            final DocumentReference documentReference = postInfo == null ? firebaseFirestore.collection("tourlist_posts").document() : firebaseFirestore.collection("tourlist_posts").document(postInfo.getPostId());
+            final DocumentReference documentReference = postInfo == null ? firebaseFirestore.collection("tourlist_posts").document(apiId).collection("board").document()
+                    : firebaseFirestore.collection("tourlist_posts").document(apiId).collection("board").document(postInfo.getPostId());
             final Date date = postInfo == null ? new Date() : postInfo.getCreatedAt(); //수정했을 경우 또는 게시물을 생성했을 경우
 
             for(int i = 0; i < parent.getChildCount(); i++){

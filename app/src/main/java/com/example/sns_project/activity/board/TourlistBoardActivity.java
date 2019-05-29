@@ -2,21 +2,19 @@ package com.example.sns_project.activity.board;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
 import com.example.sns_project.R;
 import com.example.sns_project.activity.BasicActivity;
-import com.example.sns_project.activity.MemberInitActivity;
-import com.example.sns_project.activity.SignUpActivity;
+import com.example.sns_project.activity.login.MemberInitActivity;
+import com.example.sns_project.activity.login.SignUpActivity;
 import com.example.sns_project.adapter.PostAdapter;
 import com.example.sns_project.info.PostInfo;
 import com.example.sns_project.listener.OnPostListener;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
@@ -43,6 +41,7 @@ public class TourlistBoardActivity extends BasicActivity {
     private ArrayList<PostInfo> postList; //게시물 ArrayList
     StorageReference storageRef;
     private int storageDeleteCount;
+    private String apiId, apiTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +52,9 @@ public class TourlistBoardActivity extends BasicActivity {
         FirebaseStorage storage = FirebaseStorage.getInstance();
         storageRef = storage.getReference();
 
+        Intent intent = getIntent();
+        apiId = intent.getExtras().getString("contentId");
+        apiTitle = intent.getExtras().getString("contentTitle");
         if (firebaseUser == null) {
             myStartActivity(SignUpActivity.class);
         } else {
@@ -67,15 +69,16 @@ public class TourlistBoardActivity extends BasicActivity {
                             myStartActivity(MemberInitActivity.class);
                         }
                     }
-                } else {
                 }
             });
         }
 
         postList = new ArrayList<>(); //게시물 리스트 초기화
-        postAdapter = new PostAdapter(TourlistBoardActivity.this, postList); //게시물 Adapter 초기화
+        postAdapter = new PostAdapter(TourlistBoardActivity.this, postList, apiId, apiTitle); //게시물 Adapter 초기화
         postAdapter.setOnPostListener(onPostListener); //Listener 전달
 
+        TextView boardTitle = findViewById(R.id.tv_post_guide_title);
+        boardTitle.setText(apiTitle);
         //게시글 추가 버튼
         RecyclerView recyclerView = findViewById(R.id.rv_post);
         findViewById(R.id.floatingActionButton).setOnClickListener(onClickListener);
@@ -96,7 +99,8 @@ public class TourlistBoardActivity extends BasicActivity {
         @Override
         public void onDelete(int position) {
             String postId = postList.get(position).getPostId(); //postID 값 저장
-            firebaseFirestore.collection("tourlist_posts").document(postId) //posts 컬렉션 안에있는 게시물 위치값 가져옴
+
+            firebaseFirestore.collection("tourlist_posts").document(apiId).collection("board").document(postId) //posts 컬렉션 안에있는 게시물 위치값 가져옴
                     .delete()
                     .addOnSuccessListener(aVoid -> {  //게시글 삭제 성공
                         showToast(TourlistBoardActivity.this, "삭제 완료");
@@ -131,14 +135,14 @@ public class TourlistBoardActivity extends BasicActivity {
     View.OnClickListener onClickListener = v -> {
         switch (v.getId()) {
             case R.id.floatingActionButton:
-                myStartActivity(WriteTourlistPostActivity.class); //게시글 작성 화면으로 이동
+                myStartActivity(WriteTourlistPostActivity.class, apiId); //게시글 작성 화면으로 이동
                 break;
         }
     };
 
     private void postUpdate() { //게시물 갱신 메소드
         if (firebaseUser != null) { //사용자가 로그인 되었다면
-            CollectionReference collectionReference = firebaseFirestore.collection("tourlist_posts");
+            CollectionReference collectionReference = firebaseFirestore.collection("tourlist_posts").document(apiId).collection("board");
             collectionReference
                     .orderBy("createdAt", Query.Direction.DESCENDING).get() //데이터 내림차순 정렬
                     .addOnCompleteListener(task -> {
@@ -178,6 +182,12 @@ public class TourlistBoardActivity extends BasicActivity {
 
     private void myStartActivity(Class c) { //원하는 Activity로 이동시켜주는 메소드
         Intent intent = new Intent(this, c);
+        startActivity(intent);
+    }
+
+    private void myStartActivity(Class c, String apiId) { //원하는 Activity로 이동시켜주는 메소드
+        Intent intent = new Intent(this, c);
+        intent.putExtra("apiId", apiId);
         startActivity(intent);
     }
 
